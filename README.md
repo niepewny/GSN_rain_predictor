@@ -9,5 +9,6 @@ Patch Size: 192 x 192
 Time step: 5 minutes
 ```
 w /data wykonać komendę:
+
 aws s3 cp --no-sign-request s3://sevir/CATALOG.csv CATALOG.csv
 aws s3 sync --no-sign-request s3://sevir/data/ir107 .
