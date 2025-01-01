@@ -1,5 +1,7 @@
 import pytorch_lightning as pl
+import torch
 
+# Add mapping layer and dimention reduction
 class RainPredictor(pl.LightningModule):
 
     def __init__(self, model, learning_rate, loss_metrics, quality_metrics, scheduler_step, scheduler_gamma):
