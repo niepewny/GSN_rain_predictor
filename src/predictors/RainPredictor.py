@@ -1,5 +1,7 @@
 import pytorch_lightning as pl
+import torch
 
+# Add mapping layer
 class RainPredictor(pl.LightningModule):
 
     def __init__(self, model, learning_rate, loss_metrics, quality_metrics, scheduler_step, scheduler_gamma):
@@ -20,8 +22,8 @@ class RainPredictor(pl.LightningModule):
     def forward(self, x):
         sequence_length = x.shape[0]
 
-        for i in range(sequence_length):
-            outputs = self.model(x[i])
+        for t in range(sequence_length):
+            outputs = self.model(x[t])
 
         return outputs
 
