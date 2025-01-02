@@ -114,7 +114,7 @@ def visualize_random_sample(file_name):
     sevirDataSet = SEVIRDataset(file_name)
 
     random = torch.randint(0, 552, (1,)).item()
-    sample0 = sevirDataSet.__getitem__(random)
+    sample0 = SEVIRDataset.__getitem__(random)
     visualize_tensor_interactive(sample0,f"Random sample(id:{random}) from: {file_name}")
 
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
 
     #     print("data length:",evirDataSet.data_length,"\n")
-    #     sample0 = sevirDataSet.__getitem__(0)
+    #     sample0 = SEVIRDataset.__getitem__(0)
     #     print("data shape:",sample0.shape, "\n")
     #     first_frame = sample0[:, :, 0]
 

@@ -1,12 +1,76 @@
-import pandas as pd
 import h5py
 import torch
-import matplotlib.pyplot as plt
-from ipywidgets import interact, IntSlider
-from matplotlib.widgets import Slider
-import os
 from torch.utils.data import DataLoader, Dataset, Subset
 import pytorch_lightning as pl
+from data_exploration import visualize_tensor_interactive
+
+TRAIN_ID = 0
+TEST_ID = 0
+VAL_ID = 0
+
+class SevirDataset(Dataset):
+    """
+    Dataset ładujący dane SEVIR z wielu plików HDF5.
+    Przyjmuje listę ścieżek do plików .h5, w każdym pliku
+    interesuje nas dataset `ir069` (np. shape: (X, 192, 192, 49)).
+
+    Zakładamy:
+      - Każdy plik ma wymiary (num_samples_i, 192, 192, 49)
+      - Z puli plików sumarycznie tworzymy logiczny "jeden dataset",
+        gdzie index globalny -> (konkretny plik, index w pliku).
+      - Otwieramy plik w locie przy __getitem__ (lazy loading).
+    """
+    def __init__(self, file_paths):
+        super().__init__()
+        self.file_paths = file_paths
+
+        # Liczymy ile jest łącznie próbek w każdym pliku, by móc
+        # mapować globalny index -> (który plik, wewn. index).
+        self.samples_per_file = []
+        self._cumulative_indices = []
+
+
+
+        current_cum = 0
+        for path in self.file_paths:
+            with h5py.File(path, 'r') as f:
+                # tu 'ir069' jest przykładową nazwą datasetu w pliku .h5
+                data_shape = f['ir069'].shape  # np. (X, 192,192,49)
+                x_size = data_shape[0]         # X
+            self.samples_per_file.append(x_size)
+            current_cum += x_size
+            self._cumulative_indices.append(current_cum)
+
+    def __len__(self):
+        return self._cumulative_indices[-1]
+
+    def __getitem__(self, index):
+        # Znajdujemy, w którym pliku jest dany index
+        file_idx = self._find_file_index(index)
+        # index w danym pliku (lokalny)
+        if file_idx == 0:
+            local_index = index
+        else:
+            local_index = index - self._cumulative_indices[file_idx - 1]
+
+        file_path = self.file_paths[file_idx]
+        with h5py.File(file_path, 'r') as f:
+            sample = f['ir069'][local_index]  # shape: (192,192,49)
+            sample = torch.tensor(sample, dtype=torch.float32)
+            # Ewentualnie można permutować wymiary tak, by mieć (49,1,192,192)
+            # np. sample = sample.permute(2, 0, 1).unsqueeze(1)
+            # w zależności od potrzeb ConvLSTM
+        return sample
+
+    def _find_file_index(self, index):
+        """
+        Z binary search lub prostą pętlą (dla uproszczenia pętla),
+        zwracamy numer pliku, w którym leży sample o globalnym indexie.
+        """
+        for i, cum in enumerate(self._cumulative_indices):
+            if index < cum:
+                return i
+        raise IndexError(f"Index {index} out of range {self.__len__()}")
 
 
 class ConvLSTMSevirDataModule(pl.LightningDataModule):
@@ -38,6 +102,12 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.train_dataset = None
         self.val_dataset = None
         self.test_dataset = None
+
+        # Pobieranie kolejnego przykładu do trenowania zwiększa id więc
+        # pobiera się kolejne przykłady
+        self.TRAIN_ID = 0
+        self.TEST_ID = 0
+        self.VAL_ID = 0
 
     def prepare_data(self):
         # zakładamy że pliki są już lokalnie.
@@ -79,6 +149,16 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
 
     # Metody do wyciągania sub-datasetów co skip lub w określonym zakresie
     # Zwraca Subset z sampli co skip w zbiorze treningowym.
+    def get_train_sample(self):
+        '''
+        Returns full train sample 49x192x192
+        '''
+        indices = range(0, len(self.train_dataset))
+        subset = Subset(self.train_dataset, indices)
+        sample = subset[self.TRAIN_ID]
+        self.TRAIN_ID += 1
+        return sample
+
     def get_train_data_skip(self, skip=1):
 
         indices = range(0, len(self.train_dataset), skip)
@@ -127,7 +207,7 @@ if __name__ == "__main__":
     all_file_paths = all_file_paths_2018 + all_file_paths_2019
 
     #test val train split(each includes at least one storm file)
-    train_files = [all_file_paths_2018,all_file_paths_2019[2]]
+    train_files = all_file_paths_2018 + [all_file_paths_2019[2]]
 
     validate_files = [all_file_paths_2019[0],all_file_paths_2019[3]]
 
@@ -141,6 +221,11 @@ if __name__ == "__main__":
         num_workers=4
     )
 
+
     dm.setup('fit')
     train_loader = dm.train_dataloader()
     val_loader = dm.val_dataloader()
+
+
+    sample = dm.get_train_sample()
+    visualize_tensor_interactive(sample, "Subset 0")
