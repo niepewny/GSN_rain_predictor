@@ -1,6 +1,7 @@
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 class RainPredictor(pl.LightningModule):
 
@@ -28,10 +29,12 @@ class RainPredictor(pl.LightningModule):
         self.test_step_outputs = []
 
     def forward(self, x):
-        sequence_length = x.shape[0]
-
+        batch_size, sequence_length, height, width = x.size()
+        self.initialize_hidden_state(batch_size, height, width, x.device)
         for i in range(sequence_length):
-            outputs = self.model(x[i])
+            outputs = self.model(x[:,i])
+        
+        outputs = F.relu(self.mapping_layer(outputs))
 
         return outputs
 
