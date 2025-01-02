@@ -159,33 +159,63 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.TRAIN_ID += 1
         return sample
 
-    def get_train_data_skip(self, skip=1):
+    def get_train_data_skip(self, num_frames, skip=1):
 
+        if num_frames*skip > 49:
+            raise ValueError("Skip too large(over 49 frames)")
         indices = range(0, len(self.train_dataset), skip)
-        return Subset(self.train_dataset, indices)
+        subset = Subset(self.train_dataset, indices)
+        sample = subset[self.TRAIN_ID]
+        self.TRAIN_ID += 1
+        sampled_frames_tensor = sample[:,:,0:49:skip]
+        return sampled_frames_tensor
 
-    def get_val_data_skip(self, skip=1):
+    def get_val_sample(self):
+        '''
+        Returns full validation sample 49x192x192
+        '''
+        indices = range(0, len(self.val_dataset))
+        subset = Subset(self.val_dataset, indices)
+        sample = subset[self.VAL_ID]
+        self.VAL_ID += 1
+        return sample
+
+    def get_val_data_skip(self, num_frames, skip=1):
+        '''
+        Returns sampled validation data with reduced frames [num_frames x 192 x 192]
+        '''
+        if num_frames * skip > 49:
+            raise ValueError("Skip too large (over 49 frames)")
         indices = range(0, len(self.val_dataset), skip)
-        return Subset(self.val_dataset, indices)
+        subset = Subset(self.val_dataset, indices)
+        sample = subset[self.VAL_ID]
+        self.VAL_ID += 1
+        sampled_frames_tensor = sample[:, :, 0:49:skip]
+        return sampled_frames_tensor
 
-    def get_test_data_skip(self, skip=1):
+    def get_test_sample(self):
+        '''
+        Returns full test sample 49x192x192
+        '''
+        indices = range(0, len(self.test_dataset))
+        subset = Subset(self.test_dataset, indices)
+        sample = subset[self.TEST_ID]
+        self.TEST_ID += 1
+        return sample
+
+    def get_test_data_skip(self, num_frames, skip=1):
+        '''
+        Returns sampled test data with reduced frames [num_frames x 192 x 192]
+        '''
+        if num_frames * skip > 49:
+            raise ValueError("Skip too large (over 49 frames)")
         indices = range(0, len(self.test_dataset), skip)
-        return Subset(self.test_dataset, indices)
+        subset = Subset(self.test_dataset, indices)
+        sample = subset[self.TEST_ID]
+        self.TEST_ID += 1
+        sampled_frames_tensor = sample[:, :, 0:49:skip]
+        return sampled_frames_tensor
 
-    def get_train_data_range(self, start_idx=0, count=10, step=1):
-        end_idx = start_idx + count * step
-        indices = range(start_idx, end_idx, step)
-        return Subset(self.train_dataset, indices)
-
-    def get_val_data_range(self, start_idx=0, count=10, step=1):
-        end_idx = start_idx + count * step
-        indices = range(start_idx, end_idx, step)
-        return Subset(self.val_dataset, indices)
-
-    def get_test_data_range(self, start_idx=0, count=10, step=1):
-        end_idx = start_idx + count * step
-        indices = range(start_idx, end_idx, step)
-        return Subset(self.test_dataset, indices)
 
 
 
@@ -226,6 +256,36 @@ if __name__ == "__main__":
     train_loader = dm.train_dataloader()
     val_loader = dm.val_dataloader()
 
+    # test train
+    # dm.TRAIN_ID = 0
+    # sample = dm.get_train_sample()
+    # visualize_tensor_interactive(sample, "Subset 0")
+    #
+    # #cofnięcie countera żeby dwa razy zobrazować to samo
+    # dm.TRAIN_ID=0
+    # sampled_tensor_skip = dm.get_train_data_skip(20, 2)
+    # print(sampled_tensor_skip)
+    # visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
 
-    sample = dm.get_train_sample()
+    dm.setup('fit')
+    dm.VAL_ID = 0
+    sample = dm.get_val_sample()
     visualize_tensor_interactive(sample, "Subset 0")
+
+    # cofnięcie countera żeby dwa razy zobrazować to samo
+    dm.VAL_ID = 0
+    sampled_tensor_skip = dm.get_val_data_skip(20, 2)
+    print(sampled_tensor_skip)
+    visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
+
+    # test test
+    # dm.setup('test')
+    # dm.TEST_ID = 0
+    # sample = dm.get_test_sample()
+    # visualize_tensor_interactive(sample, "Subset 0")
+    #
+    # # cofnięcie countera żeby dwa razy zobrazować to samo
+    # dm.TEST_ID = 0
+    # sampled_tensor_skip = dm.get_test_data_skip(20, 2)
+    # print(sampled_tensor_skip)
+    # visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
