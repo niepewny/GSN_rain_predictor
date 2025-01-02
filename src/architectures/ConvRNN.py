@@ -3,10 +3,11 @@ import torch.nn as nn
 
 #zastanowić się, czy liczba kanałów wyjściowych może być większa. I tak na koniec jest mapowanie z redukcją wymiarów
 class ConvRNNCell(nn.Module):
-    def __init__(self, input_channels=3, hidden_channels=3, kernel_size=5, depth=1, activation=nn.ReLU):
+    def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=nn.ReLU):
         super().__init__()
         self.depth = depth
         self.hidden_channels = hidden_channels
+        self.out_channels = 1
 
         self.input_layers = nn.ModuleList([
             nn.Conv2d(
@@ -26,10 +27,11 @@ class ConvRNNCell(nn.Module):
             ) for i in range(depth)
         ])
 
+        #potencjalnie wyrzucić. I tak jest mapper
         self.output_layers = nn.ModuleList([
             nn.Conv2d(
                 in_channels=hidden_channels,
-                out_channels=hidden_channels if i != depth-1 else 1,
+                out_channels=hidden_channels if i != depth-1 else self.out_channels,
                 kernel_size=kernel_size,
                 padding=kernel_size // 2
             ) for i in range(depth)

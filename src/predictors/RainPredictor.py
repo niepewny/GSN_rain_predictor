@@ -1,11 +1,12 @@
 import pytorch_lightning as pl
 import torch
+import torch.nn as nn
 
-# Add mapping layer and dimention reduction
 class RainPredictor(pl.LightningModule):
 
     def __init__(self, model, learning_rate, loss_metrics, quality_metrics, scheduler_step, scheduler_gamma):
         super().__init__()
+
         self.model = model
         self.lr = learning_rate
         self.loss = loss_metrics
@@ -13,6 +14,13 @@ class RainPredictor(pl.LightningModule):
         self.quality_metric = type(self.quality).__name__
         self.scheduler_step = scheduler_step
         self.scheduler_gamma = scheduler_gamma
+
+        self.mapping_layer = nn.module(nn.Conv2d(
+                in_channels=model.out_channels,
+                out_channels=1,
+                kernel_size=1,
+                padding=0
+            ))
 
         self.current_epoch_training_loss = torch.tensor(0.0)
         self.training_step_outputs = []
