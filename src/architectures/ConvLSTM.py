@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 class ConvLSTMCell(nn.Module):
-    def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=nn.ReLU):
+    def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=F.relu):
         super().__init__()
         self.depth = depth
         self.hidden_channels = hidden_channels
