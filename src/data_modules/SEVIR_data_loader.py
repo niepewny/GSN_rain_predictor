@@ -124,10 +124,12 @@ class SEVIR_dataset(Dataset):
             frames.append(frame)
         return torch.stack(frames)
 
-# dataset przyjmuje step oraz szerokość i wysokość obrazka
-# ten bez zmian
-dataset = SEVIR_dataset(train_files, 3, 128, 128)
-dataloader = DataLoader(dataset, batch_size=10, shuffle=True, num_workers=2)
-fist_sample = next(iter(dataloader))
-print(fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
-visualize_batch_tensor_interactive(fist_sample, 0, "SEVIR dataset")
+if __name__ == "__main__":
+    # przykład użycia
+
+    # dataset przyjmuje step oraz szerokość i wysokość obrazka
+    dataset = SEVIR_dataset(train_files, 3, 128, 128)
+    dataloader = DataLoader(dataset, batch_size=10, shuffle=True, num_workers=2)
+    fist_sample = next(iter(dataloader))
+    print(fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
+    visualize_batch_tensor_interactive(fist_sample, 0, "SEVIR dataset")
