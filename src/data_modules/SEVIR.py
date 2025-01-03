@@ -3,6 +3,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset, Subset
 import pytorch_lightning as pl
 from data_exploration import visualize_tensor_interactive
+from torch.nn import functional as F
 
 TRAIN_ID = 0
 TEST_ID = 0
@@ -64,7 +65,7 @@ class SevirDataset(Dataset):
 
     def _find_file_index(self, index):
         """
-        Z binary search lub prostą pętlą (dla uproszczenia pętla),
+        Z binary search lub prziweksz ostą pętlą (dla uproszczenia pętla),
         zwracamy numer pliku, w którym leży sample o globalnym indexie.
         """
         for i, cum in enumerate(self._cumulative_indices):
@@ -159,7 +160,7 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.TRAIN_ID += 1
         return sample
 
-    def get_train_data_skip(self, num_frames, skip=1):
+    def get_train_sample_skip(self, num_frames, skip=1):
 
         if num_frames*skip > 49:
             raise ValueError("Skip too large(over 49 frames)")
@@ -169,6 +170,49 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.TRAIN_ID += 1
         sampled_frames_tensor = sample[:,:,0:49:skip]
         return sampled_frames_tensor
+
+    def get_train_batch(self,batch_size):
+        '''
+        Returns batch of train samples of size:
+        batch_size x 49 x 1 x 192 x 192
+        '''
+        tensor_arr = []
+        for i in range(batch_size):
+            sample = self.get_train_sample()
+            tensor_arr.append(sample)
+        batch = torch.stack(tensor_arr)
+        batch = batch.permute(0, 3, 1, 2)
+        batch = batch.unsqueeze(2)
+        return batch
+
+
+
+    def get_train_batch_with_step(self, batch_size, step=1, resize_shape=(192, 192)):
+        """
+        Returns a batch of samples with the specified step size and resized shape.
+        The shape of the returned batch will be (batch_size, time_samples, 1, resize_shape[0], resize_shape[1]).
+
+        Parameters:
+            batch_size (int): The number of samples in the batch.
+            step (int): The step size for selecting time samples.
+            resize_shape (tuple): The desired shape (height, width) to resize the samples.
+
+        Returns:
+            torch.Tensor: A batch of samples with the specified step size and resized shape.
+        """
+        tensor_arr = []
+        for _ in range(batch_size):
+            sample = self.get_train_sample()
+            sampled_frames_tensor = sample[:, :, ::step]
+            # Resize the sampled frames
+            sampled_frames_tensor = F.interpolate(sampled_frames_tensor.unsqueeze(0), size=resize_shape, mode='bilinear', align_corners=False).squeeze(0)
+            tensor_arr.append(sampled_frames_tensor)
+
+        batch = torch.stack(tensor_arr)
+        batch = batch.permute(0, 3, 1, 2)
+        batch = batch.unsqueeze(2)
+        return batch
+
 
     def get_val_sample(self):
         '''
@@ -180,7 +224,7 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.VAL_ID += 1
         return sample
 
-    def get_val_data_skip(self, num_frames, skip=1):
+    def get_val_sample_skip(self, num_frames, skip=1):
         '''
         Returns sampled validation data with reduced frames [num_frames x 192 x 192]
         '''
@@ -203,7 +247,7 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.TEST_ID += 1
         return sample
 
-    def get_test_data_skip(self, num_frames, skip=1):
+    def get_test_sample_skip(self, num_frames, skip=1):
         '''
         Returns sampled test data with reduced frames [num_frames x 192 x 192]
         '''
@@ -216,13 +260,93 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         sampled_frames_tensor = sample[:, :, 0:49:skip]
         return sampled_frames_tensor
 
+    def test_train(dm):
+        dm.setup('fit')
+        dm.TRAIN_ID = 0
+        sample = dm.get_train_sample()
+        visualize_tensor_interactive(sample, "Subset 0")
+
+        #cofnięcie countera żeby dwa razy zobrazować to samo
+        dm.TRAIN_ID=0
+        sampled_tensor_skip = dm.get_train_data_skip(20, 2)
+        print(sampled_tensor_skip)
+        visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
 
 
+    def test_val():
+        dm.setup('fit')
+        dm.VAL_ID = 0
+        sample = dm.get_val_sample()
+        visualize_tensor_interactive(sample, "Subset 0")
+
+        # cofnięcie countera żeby dwa razy zobrazować to samo
+        dm.VAL_ID = 0
+        sampled_tensor_skip = dm.get_val_sample_skip(20, 2)
+        print(sampled_tensor_skip)
+        visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
+
+    def test_test(dm):
+        dm.setup('test')
+        dm.TEST_ID = 0
+        sample = dm.get_test_sample()
+        visualize_tensor_interactive(sample, "Subset 0")
+
+        # cofnięcie countera żeby dwa razy zobrazować to samo
+        dm.TEST_ID = 0
+        sampled_tensor_skip = dm.get_test_data_skip(20, 2)
+        print(sampled_tensor_skip)
+        visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
+
+        import torch.nn.functional as F
+
+    def get_batch_with_step(self, dataset_type, batch_size, resize_shape=(192, 192), skip=1):
+        """
+        Returns a batch of samples with the specified step size, resized shape, and frame skip.
+        The shape of the returned batch will be (batch_size, time_samples, 1, resize_shape[0], resize_shape[1]).
+
+        Parameters:
+            dataset_type (str): The type of dataset ('train', 'val', 'test').
+            batch_size (int): The number of samples in the batch.
+            step (int): The step size for selecting time samples.
+            resize_shape (tuple): The desired shape (height, width) to resize the samples.
+            skip (int): The step size for selecting frames.
+
+        Returns:
+            torch.Tensor: A batch of samples with the specified step size, resized shape, and frame skip.
+        """
+        if dataset_type == 'train':
+            dataset = self.train_dataset
+            id_attr = 'TRAIN_ID'
+        elif dataset_type == 'val':
+            dataset = self.val_dataset
+            id_attr = 'VAL_ID'
+        elif dataset_type == 'test':
+            dataset = self.test_dataset
+            id_attr = 'TEST_ID'
+        else:
+            raise ValueError("Invalid dataset type. Choose from 'train', 'val', 'test'.")
+
+        tensor_arr = []
+        for _ in range(batch_size):
+            # pobieranie zmiennej o nazwie która jest pod 'id_attr'ttr'
+
+            sample = dataset[getattr(self, id_attr)]
+            # zwiększenie tej zmienne o 1 żeby nie brać tego samego przykładu 2 razy
+            setattr(self, id_attr, getattr(self, id_attr) + 1)
+            sampled_frames_tensor = sample[:, :, 0:49:skip]
+            sampled_frames_tensor = F.interpolate(sampled_frames_tensor.unsqueeze(0), size=resize_shape,
+                                                  mode='bilinear', align_corners=False).squeeze(0)
+            tensor_arr.append(sampled_frames_tensor)
+
+        batch = torch.stack(tensor_arr)
+        batch = batch.permute(0, 3, 1, 2)
+        batch = batch.unsqueeze(2)
+        return batch
 
 if __name__ == "__main__":
     all_file_paths_2019 = [
         "../../data/2019/SEVIR_IR069_RANDOMEVENTS_2019_0101_0430.h5", #val
-        "../../data/2019/SEVIR_IR069_RANDOMEVENTS_2019_0501_0831.h5", #test
+        "../../data/2019/SEVIR_IR069_RANDOMEVENTS_2019_0501_0831.h5", #tesut
         "../../data/2019/SEVIR_IR069_RANDOMEVENTS_2019_0901_1231.h5", #train
         "../../data/2019/SEVIR_IR069_STORMEVENTS_2019_0101_0630.h5", # val
         "../../data/2019/SEVIR_IR069_STORMEVENTS_2019_0701_1231.h5"  #test
@@ -256,36 +380,10 @@ if __name__ == "__main__":
     train_loader = dm.train_dataloader()
     val_loader = dm.val_dataloader()
 
-    # test train
-    # dm.TRAIN_ID = 0
-    # sample = dm.get_train_sample()
-    # visualize_tensor_interactive(sample, "Subset 0")
-    #
-    # #cofnięcie countera żeby dwa razy zobrazować to samo
-    # dm.TRAIN_ID=0
-    # sampled_tensor_skip = dm.get_train_data_skip(20, 2)
-    # print(sampled_tensor_skip)
-    # visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
+    sample = train_loader.dataset[0]
+    print(sample.shape)
+    batch = dm.get_train_batch(2)
+    print(batch.shape)
 
-    dm.setup('fit')
-    dm.VAL_ID = 0
-    sample = dm.get_val_sample()
-    visualize_tensor_interactive(sample, "Subset 0")
+    batch2 = dm.get_batch_with_step('train', 2, resize_shape=(64, 64), skip=2)
 
-    # cofnięcie countera żeby dwa razy zobrazować to samo
-    dm.VAL_ID = 0
-    sampled_tensor_skip = dm.get_val_data_skip(20, 2)
-    print(sampled_tensor_skip)
-    visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")
-
-    # test test
-    # dm.setup('test')
-    # dm.TEST_ID = 0
-    # sample = dm.get_test_sample()
-    # visualize_tensor_interactive(sample, "Subset 0")
-    #
-    # # cofnięcie countera żeby dwa razy zobrazować to samo
-    # dm.TEST_ID = 0
-    # sampled_tensor_skip = dm.get_test_data_skip(20, 2)
-    # print(sampled_tensor_skip)
-    # visualize_tensor_interactive(sampled_tensor_skip, "Subset with skip")

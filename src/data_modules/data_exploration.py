@@ -58,6 +58,59 @@ def visualize_frame(tensor):
     plt.title("2D Tensor Visualization")
     plt.show()
 
+def visualize_batch_tensor_interactive(tensor, batch_idx=0, name=None):
+    """
+    Creates an interactive visualization of a 4D tensor with shape [batch, frames, height, width]
+    Parameters:
+        tensor: PyTorch tensor of shape [batch, frames, height, width]
+        batch_idx: Which sample from the batch to visualize
+        name: Optional name for the visualization
+    """
+    # Convert tensor to numpy if it's a PyTorch tensor
+    if torch.is_tensor(tensor):
+        # Select specific sample from batch and convert to numpy
+        tensor = tensor[batch_idx].numpy()  # Now shape is [frames, height, width]
+
+    # Create figure and axes
+    fig, ax = plt.subplots(figsize=(10, 8))
+    plt.subplots_adjust(bottom=0.2)  # Make space for the slider
+
+    # Display initial frame
+    frame_idx = 0
+    # For tensor [frames, height, width], we display frame_idx slice
+    img = ax.imshow(tensor[frame_idx], cmap='viridis')
+    plt.colorbar(img)
+
+    # Create slider axis and slider
+    ax_slider = plt.axes([0.1, 0.05, 0.65, 0.03])  # [left, bottom, width, height]
+    slider = Slider(
+        ax=ax_slider,
+        label='Frame',
+        valmin=0,
+        valmax=tensor.shape[0] - 1,  # Number of frames is first dimension now
+        valinit=frame_idx,
+        valstep=1
+    )
+
+    # Set title
+    if name:
+        title = ax.set_title(f'{name} - Frame {frame_idx} / {tensor.shape[0]-1} (Batch {batch_idx})')
+    else:
+        title = ax.set_title(f'Frame {frame_idx} / {tensor.shape[0]-1} (Batch {batch_idx})')
+
+    def update(val):
+        frame = int(slider.val)
+        img.set_array(tensor[frame])
+        if name:
+            title.set_text(f'{name} - Frame {frame} / {tensor.shape[0]-1} (Batch {batch_idx})')
+        else:
+            title.set_text(f'Frame {frame} / {tensor.shape[0]-1} (Batch {batch_idx})')
+        fig.canvas.draw_idle()
+
+    slider.on_changed(update)
+    plt.show()
+
+
 def visualize_tensor_interactive(tensor,name):
     """
     Creates an interactive visualization of a 3D tensor with shape [height, width, frames]
