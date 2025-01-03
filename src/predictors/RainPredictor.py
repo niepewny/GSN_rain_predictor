@@ -16,12 +16,12 @@ class RainPredictor(pl.LightningModule):
         self.scheduler_step = scheduler_step
         self.scheduler_gamma = scheduler_gamma
 
-        self.mapping_layer = nn.module(nn.Conv2d(
+        self.mapping_layer = nn.Conv2d(
                 in_channels=model.out_channels,
                 out_channels=1,
                 kernel_size=1,
                 padding=0
-            ))
+            )
 
         self.current_epoch_training_loss = torch.tensor(0.0)
         self.training_step_outputs = []
@@ -29,12 +29,12 @@ class RainPredictor(pl.LightningModule):
         self.test_step_outputs = []
 
     def forward(self, x):
-        batch_size, sequence_length, height, width = x.size()
-        self.initialize_hidden_state(batch_size, height, width, x.device)
+        batch_size, sequence_length, channels, height, width = x.size()
+        self.model.initialize_hidden_state(batch_size, height, width, x.device)
         for i in range(sequence_length):
-            outputs = self.model(x[:,i])
+            outputs = self.model(x[:, i], gen_output=(i == sequence_length-1))
         
-        outputs = F.relu(self.mapping_layer(outputs))
+        outputs = self.mapping_layer(outputs)
 
         return outputs
 
@@ -42,9 +42,14 @@ class RainPredictor(pl.LightningModule):
         return self.loss(y_pred, y)
 
     def common_step(self, batch, batch_idx):
-        x, y = batch
+        ### temp
+        batch = batch.permute(0, 3, 1, 2)
+        batch = batch.unsqueeze(2)
+        ###
+        x = batch[:, :-1]
+        y = batch[:, -1]
         outputs = self(x)
-        loss = self.compute_loss(outputs,y)
+        loss = self.compute_loss(outputs, y)
         return loss, outputs, y
 
     def common_test_valid_step(self, batch, batch_idx):
@@ -87,16 +92,25 @@ class RainPredictor(pl.LightningModule):
                 "validation_loss": loss,
                 f"validation_{self.quality_metric}": quality
             },
-            on_step = False,
-            on_epoch = True,
-            prog_bar = True
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True
         )
-        return {'val_loss':loss, self.quality_metric: quality}
+        return {'validation_loss': loss, self.quality_metric: quality}
 
     def on_validation_epoch_end(self):
         outs = torch.stack(self.validation_step_outputs)
         avg_loss = outs.mean()
-        self.logger.experiment.add_scalars('train and vall losses', {'train': self.current_epoch_training_loss.item() , 'val': avg_loss.item()}, self.current_epoch)
+
+        # self.logger.experiment.log('train and vall losses', {'train': self.current_epoch_training_loss.item(), 'val': avg_loss.item()}, self.current_epoch)
+        #
+        # self.logger.experiment.log({
+        #     'train_loss': self.current_epoch_training_loss.item(),
+        #     'val_loss': avg_loss.item(),
+        #     'epoch': self.current_epoch
+        # })
+        self.log('validation_loss', avg_loss, on_epoch=True)
+        #todo upper or lower - one from chat, other from .ipynb
         self.validation_step_outputs.clear()
 
     def test_step(self, batch, batch_idx):
@@ -108,24 +122,21 @@ class RainPredictor(pl.LightningModule):
                 "test_loss": loss,
                 f"test_{self.quality_metric}": quality
             },
-            on_step = False,
-            on_epoch = False,
-            prog_bar = False
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True
         )
         return {'test_loss':loss, self.quality_metric: quality}
-    
 
     # Not sure if it should stay. Chat says it's good, because model is tested in batches.
     def on_test_epoch_end(self):
         outs = torch.stack(self.test_step_outputs)
         avg_loss = outs.mean()
-        self.logger.experiment.add_scalar(
-            'test_loss_epoch', avg_loss.item(), self.current_epoch
-        )
+        self.log('test_loss_epoch', avg_loss, on_epoch=True)
         self.test_step_outputs.clear()
 
     # We should decide if we should stick to Adam/scheduler or dump it to hydra
     def configure_optimizers(self):
-        optimizer =  torch.optim.Adam(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.scheduler_step, gamma=self.scheduler_gamma)
         return [optimizer], [lr_scheduler]

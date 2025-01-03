@@ -38,6 +38,8 @@ class ConvRNNCell(nn.Module):
             ) for i in range(depth)
         ])
 
+        self.bias = nn.Parameter(torch.randn(hidden_channels))
+
         self.activation = activation
 
         self.h_prev = None
@@ -47,9 +49,8 @@ class ConvRNNCell(nn.Module):
             batch_size, self.hidden_channels, height, width, device=device
         )
 
+    #zastanowić się nad innymi aktywacjami. Jeśli na końcu używamy tanh, to relu nie mają sensu
     def forward(self, x, gen_output=False):
-        output = None
-
         if self.h_prev is None:
             batch_size, _, height, width = x.size()
             self.initialize_hidden_state(batch_size, height, width, x.device)
@@ -61,10 +62,11 @@ class ConvRNNCell(nn.Module):
         for layer in self.hidden_layers:
             h_prev = self.activation(layer(h_prev))
 
-        h_next = x + h_prev
+        h_next = F.tanh(x + h_prev + self.bias.view(1, -1, 1, 1))
 
-        for layer in self.output_layers:
-            h_next = self.activation(layer(h_next))
+        #to było chyba dlatego, że mi odjebało xd
+        # for layer in self.output_layers:
+        #     h_next = self.activation(layer(h_next))
 
         self.h_prev = h_next
 
