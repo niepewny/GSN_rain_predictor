@@ -204,7 +204,7 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
 
 
 if __name__ == "__main__":
-    # przykład użycia oba przykłady są równoważne
+    ''' przykład użycia oba przykłady są równoważne '''
     # tylko jeden jest na pytorch a drugi na pytorch lighnting
 
     ''' pytorch dataset '''
