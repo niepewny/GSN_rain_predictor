@@ -17,9 +17,9 @@ data:
   height: 64
   batch_size: 10
   num_workers: 2
-  train_files_percent: 70
-  val_files_percent: 15
-  test_files_percent: 15
+  train_files_percent: 0.7
+  val_files_percent: 0.15
+  test_files_percent: 0.15
 
 early_stopping:
   monitor: 'validation_loss'
