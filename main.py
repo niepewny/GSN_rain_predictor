@@ -3,7 +3,6 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
-from torch.utils.data import DataLoader
 
 # utils
 import hydra
@@ -11,7 +10,6 @@ from hydra.utils import instantiate
 from omegaconf import DictConfig
 import wandb
 import os
-from datetime import datetime
 from omegaconf import OmegaConf
 
 # Custom
@@ -20,29 +18,21 @@ from src.data_modules.SEVIR_data_loader import ConvLSTMSevirDataModule
 from src.utils.Logger import ImagePredictionLogger
 
 
-@hydra.main(config_path=".", config_name="config")
+@hydra.main(config_path=".", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
     wandb.login(key=cfg.wandb.key)
-    # rnn_cell_name = cfg.model.RNN_cell["_target_"].split('.')[-1]
-    # timestamp = datetime.now().strftime("%d-%H-%M-%S")
-    # experiment_id = f"{rnn_cell_name}" \
-    #                 f"_D{cfg.model.RNN_cell.depth}" \
-    #                 f"_K{cfg.model.RNN_cell.kernel_size}" \
-    #                 f"_H{cfg.model.RNN_cell.hidden_channels}" \
-    #                 f"_SS{cfg.data.sequence_length}.{cfg.data.step}" \
-    #                 f"_{timestamp}"
 
     dm = ConvLSTMSevirDataModule(
-        sequence_length=cfg.data.sequence_length,
         step=cfg.data.step,
         width=cfg.data.width,
         height=cfg.data.height,
-        train_files=[os.path.join(cfg.data.dir, f) for f in os.listdir(cfg.data.dir)][:3],
-        val_files=[os.path.join(cfg.data.dir, f) for f in os.listdir(cfg.data.dir)][:3],
-        test_files=[os.path.join(cfg.data.dir, f) for f in os.listdir(cfg.data.dir)][:3],
-        file_paths=[os.path.join(cfg.data.dir, f) for f in os.listdir(cfg.data.dir)][:3],
+        sequence_length=cfg.data.sequence_length,
+        files_dir=cfg.data.dir,
         batch_size=cfg.data.batch_size,
-        num_workers=cfg.data.num_workers
+        num_workers=cfg.data.num_workers,
+        train_files_percent=cfg.data.train_files_percent,
+        val_files_percent=cfg.data.val_files_percent,
+        test_files_percent=cfg.data.test_files_percent
     )
 
     dm.setup('fit')
@@ -76,7 +66,7 @@ def main(cfg: DictConfig):
         callbacks=[
             checkpoint_callback,
             early_stop_callback,
-            ImagePredictionLogger(val_samples)
+            ImagePredictionLogger(val_samples, num_samples=cfg.trainer.num_visualised_samples)
             ],
         logger=WandbLogger(
             project=cfg.wandb.project_name,
@@ -94,19 +84,6 @@ def main(cfg: DictConfig):
     trainer.test(model=main_model, datamodule=dm)
 
     wandb.finish()
-
-    # run = wandb.init(
-    #     project=cfg.wandb.project_name,
-    #     job_type='producer',
-    #     config=OmegaConf.to_container(cfg, resolve=True),
-    #     name=experiment_id
-    # )
-    #
-    # artifact = wandb.Artifact(f'model_{experiment_id}', type='model')
-    # artifact.add_dir(model_dir)
-    #
-    # run.log_artifact(artifact)
-    # run.join()
 
 
 if __name__ == "__main__":
