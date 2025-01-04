@@ -4,13 +4,14 @@ from torch.utils.data import DataLoader, Dataset, Subset
 import pytorch_lightning as pl
 from torch.nn import functional as F
 import os
+import math
 from torchvision import transforms
 from data_exploration import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
 
-
+TIME_STEPS = 49
 
 all_file_paths_2019 = [
     "../../data/2019/SEVIR_IR069_RANDOMEVENTS_2019_0101_0430.h5", #val
@@ -40,7 +41,7 @@ class SEVIR_dataset(Dataset):
     """
     Dataset ładujący dane SEVIR z wielu plików HDF5.
     """
-    def __init__(self, file_paths, step, width, height):
+    def __init__(self, file_paths, step, width, height, sequence_length):
         super().__init__()
         # Convert relative paths to absolute paths
         self.file_paths = [os.path.abspath(path) for path in file_paths]
@@ -50,6 +51,7 @@ class SEVIR_dataset(Dataset):
         self.step = step
         self.width = width
         self.height = height
+        self.sequence_length = sequence_length
 
         current_cum = 0
         for path in self.file_paths:
@@ -88,6 +90,9 @@ class SEVIR_dataset(Dataset):
         4. zmiana rozmiaru na np. 25 x height x width
         5. normalizacja z zakresu 0-255 na 0-1
         '''
+        if self.sequence_length > math.ceil(TIME_STEPS/self.step):
+                        raise ValueError(f"sequence_length {self.sequence_length} is greater than available frames {math.ceil(TIME_STEPS/self.step)} (TIME_STEPS/step)")
+
         try:
             # otwarcie sampla z pliku za pomocą indeksu lokalnego(własciwego dla danego pliku)
             with h5py.File(file_path, 'r') as f:
@@ -96,18 +101,22 @@ class SEVIR_dataset(Dataset):
                 # zamienia z 192x192x49 na 49x192x192
                 permuted_sample = sample.permute(2, 0, 1)
                 # przy kroku 2 zamienia na 25x192x192
-                permuted_sample_with_step = self._get_sample_with_step(permuted_sample, self.step)
+                permuted_sample_step = self._get_sample_with_step(permuted_sample, self.step)
+                # check czy oczekiwana długość jest mniejsza niż wzięcie co ntej klatki, a torch robi ceil przy samplowaniu
+                if self.sequence_length <= math.ceil(TIME_STEPS/self.step):
+                    permuted_sample_step_len = permuted_sample_step[:self.sequence_length]
                 # zmiana rozmiaru na np. 25 x height x width
                 if self.width != 192 or self.height != 192:
                     resize = transforms.Resize((self.height, self.width), antialias=True)
-                    permuted_sample_with_step_resized = resize(permuted_sample_with_step)
+                    permuted_sample_step_resized = resize(permuted_sample_step_len)
                 else:
-                    permuted_sample_with_step_resized = permuted_sample_with_step
+                    permuted_sample_step_resized = permuted_sample_step
                 # normalizacja z zakresu 0-255 na 0-1
-                permuted_sample_with_step_resized_normalized = permuted_sample_with_step_resized / 1000
-                permuted_sample_with_step_resized_normalized_channel = permuted_sample_with_step_resized_normalized.unsqueeze(1)
+                permuted_sample_step_resized_normalized = permuted_sample_step_resized / 1000
+                permuted_sample_step_resized_normalized_channel = permuted_sample_step_resized_normalized.unsqueeze(1)
 
-                return permuted_sample_with_step_resized_normalized_channel
+                return permuted_sample_step_resized_normalized_channel
+
         except Exception as e:
             print(f"Error loading file {file_path} at index {local_index}")
             raise e
@@ -141,6 +150,7 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         step,
         width,
         height,
+        sequence_length,
         # przypisanie plików do zbiorów
         train_files=train_files,
         val_files=validate_files,
@@ -160,6 +170,7 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         self.step = step
         self.width = width
         self.height = height
+        self.sequence_length = sequence_length
 
         self.train_dataset = None
         self.val_dataset = None
@@ -174,11 +185,11 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
     def setup(self, stage=None):
         # Tworzymy dataset-y.
         if stage == 'fit' or stage is None:
-            self.train_dataset = SEVIR_dataset(self.train_files, self.step, self.width, self.height)
-            self.val_dataset   = SEVIR_dataset(self.val_files, self.step, self.width, self.height)
+            self.train_dataset = SEVIR_dataset(self.train_files, self.step, self.width, self.height, self.sequence_length)
+            self.val_dataset   = SEVIR_dataset(self.val_files, self.step, self.width, self.height, self.sequence_length)
 
         if stage == 'test' or stage is None:
-            self.test_dataset  = SEVIR_dataset(self.test_files, self.step, self.width, self.height)
+            self.test_dataset  = SEVIR_dataset(self.test_files, self.step, self.width, self.height, self.sequence_length)
 
     def train_dataloader(self):
         return DataLoader(
@@ -210,8 +221,8 @@ if __name__ == "__main__":
     # tylko jeden jest na pytorch a drugi na pytorch lighnting
 
     ''' pytorch dataset '''
-    # przyjmuje step oraz szerokość i wysokość obrazka
-    dataset = SEVIR_dataset(train_files, 3, 128, 128)
+    # przyjmuje step oraz szerokość i wysokość obrazka, oraz długość sekwencji(ucinamy 2 klatki tutaj)
+    dataset = SEVIR_dataset(train_files, 3, 128, 128, 15)
     dataloader = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=1)
     fist_sample = next(iter(dataloader))
     print("data loader",fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
@@ -219,7 +230,7 @@ if __name__ == "__main__":
 
     ''' pytorch lightning datamodule '''
     # przykład użycia
-    dm = ConvLSTMSevirDataModule(step=3, width=128, height=128, batch_size=4, num_workers=1)
+    dm = ConvLSTMSevirDataModule(step=3, width=128, height=128, batch_size=4, num_workers=1, sequence_length=15)
     dm.setup('fit')
     train_loader = dm.train_dataloader()
     batch = next(iter(train_loader))
