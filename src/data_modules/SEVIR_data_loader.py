@@ -6,7 +6,7 @@ from torch.nn import functional as F
 import os
 import math
 from torchvision import transforms
-from data_exploration import visualize_batch_tensor_interactive
+#from data_exploration import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
@@ -246,9 +246,9 @@ if __name__ == "__main__":
 
     dm.setup('fit')
     train_loader = dm.train_dataloader()
+    val_loader = dm.val_dataloader
     dm.setup('test')
     test_loader = dm.test_dataloader
-    val_loader = dm.val_dataloader
     batch = next(iter(train_loader))
     print("data module",batch.shape) # zwraca torch.Size([4, 17, 128, 128
     print("sample split data loader",len(dm.train_dataset),len(dm.val_dataset),len(dm.test_dataset))
