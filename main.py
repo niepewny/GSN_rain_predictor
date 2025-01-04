@@ -23,8 +23,14 @@ from src.utils.Logger import ImagePredictionLogger
 @hydra.main(config_path=".", config_name="config")
 def main(cfg: DictConfig):
     wandb.login(key=cfg.wandb.key)
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    experiment_id = f"experiment_{timestamp}"
+    rnn_cell_name = cfg.main_model.RNN_cell["_target_"].split('.')[-1]
+    timestamp = datetime.now().strftime("%d.%H.%M.%S")
+    experiment_id = f"{rnn_cell_name}" \
+                    f"_D{cfg.main_model.RNN_cell.depth}" \
+                    f"_K{cfg.main_model.RNN_cell.kernel_size}" \
+                    f"_H{cfg.main_model.RNN_cell.hidden_channels}" \
+                    f"_SS{cfg.dataset.sequence_length}.{cfg.dataset.step}" \
+                    f"_{timestamp}"
 
     dataset = SEVIR_dataset(
         file_paths=[os.path.join(cfg.dataset.dir, f) for f in os.listdir(cfg.dataset.dir)][:3],
@@ -47,7 +53,7 @@ def main(cfg: DictConfig):
         verbose=cfg.early_stopping.verbose,
     )
 
-    model_dir = os.path.join(cfg.checkpoint.dirpath, timestamp)
+    model_dir = os.path.join(cfg.checkpoint.dirpath, experiment_id)
     os.makedirs(model_dir, exist_ok=True)
 
     checkpoint_callback = ModelCheckpoint(
@@ -71,7 +77,12 @@ def main(cfg: DictConfig):
             early_stop_callback,
             ImagePredictionLogger(val_samples)
             ],
-        logger=WandbLogger(project=cfg.wandb.project_name, job_type='train', name=experiment_id),
+        logger=WandbLogger(
+            project=cfg.wandb.project_name,
+            job_type='train',
+            name=experiment_id,
+            config=OmegaConf.to_container(cfg, resolve=True),
+    ),
         accelerator=cfg.trainer.accelerator,
         devices=cfg.trainer.devices,
         max_epochs=cfg.trainer.max_epochs
