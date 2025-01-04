@@ -105,7 +105,9 @@ class SEVIR_dataset(Dataset):
                     permuted_sample_with_step_resized = permuted_sample_with_step
                 # normalizacja z zakresu 0-255 na 0-1
                 permuted_sample_with_step_resized_normalized = permuted_sample_with_step_resized / 1000
-                return permuted_sample_with_step_resized_normalized
+                permuted_sample_with_step_resized_normalized_channel = permuted_sample_with_step_resized_normalized.unsqueeze(1)
+
+                return permuted_sample_with_step_resized_normalized_channel
         except Exception as e:
             print(f"Error loading file {file_path} at index {local_index}")
             raise e
@@ -210,16 +212,16 @@ if __name__ == "__main__":
     ''' pytorch dataset '''
     # przyjmuje step oraz szerokość i wysokość obrazka
     dataset = SEVIR_dataset(train_files, 3, 128, 128)
-    dataloader = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=2)
+    dataloader = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=1)
     fist_sample = next(iter(dataloader))
     print("data loader",fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
     # visualize_batch_tensor_interactive(fist_sample, 0, "SEVIR dataset")
 
     ''' pytorch lightning datamodule '''
     # przykład użycia
-    dm = ConvLSTMSevirDataModule(step=3, width=128, height=128, batch_size=4, num_workers=2)
+    dm = ConvLSTMSevirDataModule(step=3, width=128, height=128, batch_size=4, num_workers=1)
     dm.setup('fit')
     train_loader = dm.train_dataloader()
     batch = next(iter(train_loader))
     print("data module",batch.shape) # zwraca torch.Size([4, 17, 128, 128
-    visualize_batch_tensor_interactive(batch, 0, "SEVIR dataset")
+    # visualize_batch_tensor_interactive(batch, 0, "SEVIR dataset")
