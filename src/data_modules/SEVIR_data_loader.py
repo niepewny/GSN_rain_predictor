@@ -2,11 +2,13 @@ import h5py
 import torch
 from torch.utils.data import DataLoader, Dataset, Subset
 import pytorch_lightning as pl
-from data_exploration import visualize_tensor_interactive
 from torch.nn import functional as F
 import os
 from torchvision import transforms
-from data_exploration import visualize_batch_tensor_interactive
+# from data_exploration import visualize_batch_tensor_interactive
+import os
+os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
+
 
 
 
@@ -102,7 +104,7 @@ class SEVIR_dataset(Dataset):
                 else:
                     permuted_sample_with_step_resized = permuted_sample_with_step
                 # normalizacja z zakresu 0-255 na 0-1
-                permuted_sample_with_step_resized_normalized = permuted_sample_with_step_resized / 255.0
+                permuted_sample_with_step_resized_normalized = permuted_sample_with_step_resized / 1000
                 return permuted_sample_with_step_resized_normalized
         except Exception as e:
             print(f"Error loading file {file_path} at index {local_index}")
