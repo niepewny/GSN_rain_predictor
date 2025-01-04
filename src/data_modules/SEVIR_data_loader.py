@@ -7,7 +7,7 @@ import os
 import math
 from torchvision import transforms
 #from data_exploration import visualize_batch_tensor_interactive
-from vizualization import visualize_batch_tensor_interactive
+from src.data_modules.vizualization import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
