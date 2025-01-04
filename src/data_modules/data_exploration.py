@@ -1,12 +1,11 @@
-import pandas as pd
 import h5py
-import torch
-from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
-from ipywidgets import interact, IntSlider
-from matplotlib.widgets import Slider
-# from SEVIR_data_loader import SEVIR_dataset
-from torch.utils.data import DataLoader, Dataset, Subset
+from SEVIR_data_loader import SEVIR_dataset, ConvLSTMSevirDataModule
+# from SEVIR import SEVIRDataset
+from torch.utils.data import Dataset
+import torch
+from torch.utils.data import DataLoader
+import numpy as np
 
 #todo:
     # parametryzacja resize
@@ -49,128 +48,7 @@ class SEVIRDataset(Dataset):
             sample = torch.tensor(sample, dtype=torch.float32)
         return sample
 
-def visualize_frame(tensor):
-    # Convert tensor to numpy array from PyTorch tensor
-    if torch.is_tensor(tensor):
-        tensor = tensor.numpy()
 
-    # Plot the tensor using matplotlib with blue to green to red color map
-    plt.imshow(tensor, cmap='seismic')
-    plt.colorbar()
-    plt.title("2D Tensor Visualization")
-    plt.show()
-
-def visualize_batch_tensor_interactive(tensor, batch_idx=0, name=None):
-    """
-    Creates an interactive visualization of a 4D tensor with shape [batch, frames, height, width]
-    Parameters:
-        tensor: PyTorch tensor of shape [batch, frames, height, width]
-        batch_idx: Which sample from the batch to visualize
-        name: Optional name for the visualization
-    """
-    # Convert tensor to numpy if it's a PyTorch tensor
-    if torch.is_tensor(tensor):
-        # Select specific sample from batch and convert to numpy
-        tensor = tensor[batch_idx].numpy()  # Now shape is [frames, height, width]
-
-    # Create figure and axes
-    fig, ax = plt.subplots(figsize=(10, 8))
-    plt.subplots_adjust(bottom=0.2)  # Make space for the slider
-
-    # Display initial frame
-    frame_idx = 0
-    # For tensor [frames, height, width], we display frame_idx slice
-    img = ax.imshow(tensor[frame_idx], cmap='viridis')
-    plt.colorbar(img)
-
-    # Create slider axis and slider
-    ax_slider = plt.axes([0.1, 0.05, 0.65, 0.03])  # [left, bottom, width, height]
-    slider = Slider(
-        ax=ax_slider,
-        label='Frame',
-        valmin=0,
-        valmax=tensor.shape[0] - 1,  # Number of frames is first dimension now
-        valinit=frame_idx,
-        valstep=1
-    )
-
-    # Set title
-    if name:
-        title = ax.set_title(f'{name} - Frame {frame_idx} / {tensor.shape[0]-1} (Batch {batch_idx})')
-    else:
-        title = ax.set_title(f'Frame {frame_idx} / {tensor.shape[0]-1} (Batch {batch_idx})')
-
-    def update(val):
-        frame = int(slider.val)
-        img.set_array(tensor[frame])
-        if name:
-            title.set_text(f'{name} - Frame {frame} / {tensor.shape[0]-1} (Batch {batch_idx})')
-        else:
-            title.set_text(f'Frame {frame} / {tensor.shape[0]-1} (Batch {batch_idx})')
-        fig.canvas.draw_idle()
-
-    slider.on_changed(update)
-    plt.show()
-
-
-def visualize_tensor_interactive(tensor,name):
-    """
-    Creates an interactive visualization of a 3D tensor with shape [height, width, frames]
-    Parameters:
-        tensor: PyTorch tensor or numpy array of shape [height, width, frames]
-    """
-    # Convert tensor to numpy if it's a PyTorch tensor
-    if torch.is_tensor(tensor):
-        tensor = tensor.numpy()
-
-    # Create figure and axes
-    fig, ax = plt.subplots(figsize=(10, 8))
-    plt.subplots_adjust(bottom=0.2)  # Make space for the slider
-
-    # Display initial frame
-    frame_idx = 0
-    img = ax.imshow(tensor[:, :, frame_idx], cmap='viridis')
-    plt.colorbar(img)
-
-    # Create slider axis and slider
-    ax_slider = plt.axes([0.1, 0.05, 0.65, 0.03])  # [left, bottom, width, height]
-    slider = Slider(
-        ax=ax_slider,
-        label='Frame',
-        valmin=0,
-        valmax=tensor.shape[2] - 1,
-        valinit=frame_idx,
-        valstep=1
-    )
-
-    # Title with frame information
-    title = ax.set_title(f'Frame {frame_idx} / {tensor.shape[2]-1}')
-
-    # Update function for the slider
-    if name:
-        title = ax.set_title(f'{name} - Frame {frame_idx} / {tensor.shape[2]-1}')
-    else:
-        title = ax.set_title(f'Frame {frame_idx} / {tensor.shape[2]-1}')
-
-        # Modified update function to maintain the name in the title
-    def update(val):
-        frame = int(slider.val)
-        img.set_array(tensor[:, :, frame])
-        if name:
-            title.set_text(f'{name} - Frame {frame} / {tensor.shape[2]-1}')
-        else:
-            title.set_text(f'Frame {frame} / {tensor.shape[2]-1}')
-        fig.canvas.draw_idle()
-
-    slider.on_changed(update)
-    plt.show()
-
-def visualize_random_sample(file_name):
-    sevirDataSet = SEVIRDataset(file_name)
-
-    random = torch.randint(0, 552, (1,)).item()
-    sample0 = SEVIRDataset.__getitem__(random)
-    visualize_tensor_interactive(sample0,f"Random sample(id:{random}) from: {file_name}")
 
 
 def print_data_info(file_path):
@@ -190,6 +68,7 @@ def print_all_files_info(all_file_paths):
     print(f"Total files: {len(all_file_paths)}")
     print(f"Total samples: {samples_sum}")
     print(f"size (X, 192, 192, 49)")
+
 
 def compare_storm_to_randomevents():
     file_path_randomevents = "../../data/2018/SEVIR_IR069_RANDOMEVENTS_2018_0101_0430.h5"
@@ -237,6 +116,7 @@ def analyze_data_distribution(dataset, num_batches=100, batch_size=32):
     global_min = min(all_mins)
     global_max = max(all_maxs)
 
+
     # Tworzenie histogramu
     plt.figure(figsize=(12, 6))
     plt.hist(all_values, bins=10, edgecolor='black')
@@ -264,10 +144,73 @@ def analyze_data_distribution(dataset, num_batches=100, batch_size=32):
 
     plt.show()
 
+def calculate_batch_statistics(batch):
+    """Calculate statistics for a batch"""
+    avg = torch.mean(batch.float()).item()
+    min_val = torch.min(batch.float()).item()
+    max_val = torch.max(batch.float()).item()
+    return avg, min_val, max_val
+
+def print_dataset_statistics(dataloader, print_interval=50):
+    """
+    Loop through the dataset and print statistics every n batches
+    """
+    batch_count = 0
+    running_avg = 0
+    running_min = float('inf')
+    running_max = float('-inf')
+
+    print(f"Starting statistics calculation...")
+
+    for batch in dataloader:
+        batch_count += 1
+        avg, min_val, max_val = calculate_batch_statistics(batch)
+
+        # Update running statistics
+        running_avg += avg
+        running_min = min(running_min, min_val)
+        running_max = max(running_max, max_val)
+
+        if batch_count % print_interval == 0:
+            current_avg = running_avg / print_interval
+            print(f"\nBatch {batch_count}:")
+            print(f"Last {print_interval} batches average: {current_avg:.4f}")
+            print(f"Current batch min: {min_val:.4f}")
+            print(f"Current batch max: {max_val:.4f}")
+            print(f"Running min: {running_min:.4f}")
+            print(f"Running max: {running_max:.4f}")
+            running_avg = 0  # Reset running average
+
+    # Print final statistics
+    print("\nFinal Statistics:")
+    print(f"Total number of batches processed: {batch_count}")
+    print(f"Overall min: {running_min:.4f}")
+    print(f"Overall max: {running_max:.4f}")
+
+
 if __name__ == "__main__":
 
+    file_path_h5_dir = "../../data/"
+    dm = ConvLSTMSevirDataModule(
+        step=3,
+        width=128,
+        height=128,
+        batch_size=4,
+        num_workers=1,
+        sequence_length=15,
+        train_files_percent=0.7,
+        val_files_percent=0.15,
+        test_files_percent=0.15,
+        files_dir=file_path_h5_dir
+    )
 
-    analyze_data_distribution(SEVIRDataset(all_file_paths[0]), num_batches=100, batch_size=32)
+    # Setup and get train loader
+    dm.setup('fit')
+    train_loader = dm.train_dataloader()
+
+    # Calculate and print statistics
+    print_dataset_statistics(train_loader, print_interval=50)
+    # analyze_data_distribution(SEVIRDataset(all_file_paths[0]), num_batches=100, batch_size=32)
 
     # print_all_files_info(all_file_paths)
     # compare_storm_to_randomevents()

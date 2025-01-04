@@ -7,10 +7,13 @@ import os
 import math
 from torchvision import transforms
 #from data_exploration import visualize_batch_tensor_interactive
+from vizualization import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
 TIME_STEPS = 49
+DATA_MIN = -6500.0
+DATA_MAX = -1000.0
 
 class SEVIR_dataset(Dataset):
     """
@@ -87,7 +90,7 @@ class SEVIR_dataset(Dataset):
                 else:
                     permuted_sample_step_resized = permuted_sample_step
                 # normalizacja z zakresu 0-255 na 0-1
-                permuted_sample_step_resized_normalized = permuted_sample_step_resized / 1000
+                permuted_sample_step_resized_normalized = ((permuted_sample_step_resized - DATA_MIN)*2 / (DATA_MAX - DATA_MIN))-1
                 permuted_sample_step_resized_normalized_channel = permuted_sample_step_resized_normalized.unsqueeze(1)
 
                 return permuted_sample_step_resized_normalized_channel
@@ -143,9 +146,9 @@ class ConvLSTMSevirDataModule(pl.LightningDataModule):
         # parametry DataLoadera
         batch_size=4,
         num_workers=2,
-        train_files_percent=70,
-        val_files_percent=15,
-        test_files_percent=15
+        train_files_percent=0.7,
+        val_files_percent=0.15,
+        test_files_percent=0.15
     ):
         super().__init__()
         self.batch_size = batch_size
@@ -228,7 +231,7 @@ if __name__ == "__main__":
     fist_sample = next(iter(dataloader))
     print("data loader",fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
     print("sample split data loader",len(train_dataset),len(val_dataset),len(test_dataset),"\n")
-    # visualize_batch_tensor_interactive(fist_sample, 0, "SEVIR dataset")
+
 
     ''' pytorch lightning datamodule '''
     # # przykład użycia
@@ -252,4 +255,5 @@ if __name__ == "__main__":
     batch = next(iter(train_loader))
     print("data module",batch.shape) # zwraca torch.Size([4, 17, 128, 128
     print("sample split data loader",len(dm.train_dataset),len(dm.val_dataset),len(dm.test_dataset))
+    visualize_batch_tensor_interactive(batch, 0, "SEVIR dataset")
     # visualize_batch_tensor_interactive(batch, 0, "SEVIR dataset")
