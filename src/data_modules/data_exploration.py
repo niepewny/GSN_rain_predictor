@@ -5,6 +5,8 @@ from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 from ipywidgets import interact, IntSlider
 from matplotlib.widgets import Slider
+from SEVIR_data_loader import SEVIR_dataset
+from torch.utils.data import DataLoader, Dataset, Subset
 
 #todo:
     # parametryzacja resize
@@ -196,9 +198,78 @@ def compare_storm_to_randomevents():
     visualize_random_sample(file_path_storm)
     visualize_random_sample(file_path_randomevents)
 
+def analyze_data_distribution(dataset, num_batches=100, batch_size=32):
+    """
+    Analizuje rozkład wartości w datasecie.
+
+    Args:
+        dataset: Dataset do przeanalizowania
+        num_batches: Ile batchy przeanalizować
+        batch_size: Wielkość batcha
+    """
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+
+    # Inicjalizacja list na wartości
+    all_mins = []
+    all_maxs = []
+    all_values = []
+
+    print("Zbieranie statystyk...")
+
+    # Zbieranie wartości z próbek
+    for i, batch in enumerate(dataloader):
+        if i >= num_batches:
+            break
+
+        batch_min = batch.min().item()
+        batch_max = batch.max().item()
+
+        all_mins.append(batch_min)
+        all_maxs.append(batch_max)
+
+        # Zbieranie wszystkich wartości dla histogramu
+        all_values.extend(batch.flatten().tolist())
+
+        if i % 10 == 0:
+            print(f"Przetworzono {i}/{num_batches} batchy")
+
+    # Obliczanie globalnych statystyk
+    global_min = min(all_mins)
+    global_max = max(all_maxs)
+
+    # Tworzenie histogramu
+    plt.figure(figsize=(12, 6))
+    plt.hist(all_values, bins=10, edgecolor='black')
+    plt.title('Rozkład wartości w datasecie')
+    plt.xlabel('Wartość')
+    plt.ylabel('Liczba wystąpień')
+    plt.grid(True, alpha=0.3)
+
+    # Dodanie statystyk do wykresu
+    stats_text = f'Min: {global_min:.2f}\nMax: {global_max:.2f}'
+    plt.text(0.95, 0.95, stats_text,
+             transform=plt.gca().transAxes,
+             verticalalignment='top',
+             horizontalalignment='right',
+             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+
+    # Obliczanie przedziałów
+    bins = np.linspace(global_min, global_max, 11)
+    print("\nPrzedziały wartości:")
+    for i in range(len(bins)-1):
+        print(f"Przedział {i+1}: [{bins[i]:.2f}, {bins[i+1]:.2f})")
+
+    print(f"\nWartość minimalna: {global_min:.2f}")
+    print(f"Wartość maksymalna: {global_max:.2f}")
+
+    plt.show()
+
 if __name__ == "__main__":
 
-    print_all_files_info(all_file_paths)
+
+    analyze_data_distribution(SEVIRDataset(all_file_paths[0]), num_batches=100, batch_size=32)
+
+    # print_all_files_info(all_file_paths)
     # compare_storm_to_randomevents()
 
     # dane w formacie: shape=(553, 192, 192, 49)
