@@ -3,98 +3,95 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
-import torch.nn as nn
-import torch.nn.functional as F
-import torchmetrics
+from torch.utils.data import DataLoader
 
 # utils
 import hydra
 from hydra.utils import instantiate
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 import wandb
 import os
+from datetime import datetime
+from omegaconf import OmegaConf
 
 # Custom
-from src.architectures.ConvRNN import ConvRNNCell
 from src.predictors.RainPredictor import RainPredictor
-from src.data_modules.SEVIR import ConvLSTMSevirDataModule
+from src.data_modules.SEVIR_data_loader import SEVIR_dataset
 from src.utils.Logger import ImagePredictionLogger
 
-if __name__ == "__main__":
-    wandb_key = "40c5c10f4b03fb955b2343280005f183c6e39d70"
-    wandb.login(key=wandb_key)
 
-    dm = ConvLSTMSevirDataModule(
-        train_files=[os.path.join("D:\\gsn_dataset\\2018", f) for f in os.listdir("D:\\gsn_dataset\\2018")][:1],
-        val_files=[os.path.join("D:\\gsn_dataset\\2019", f) for f in os.listdir("D:\\gsn_dataset\\2019")][:1],
-        test_files=[os.path.join("D:\\gsn_dataset\\2018", f) for f in os.listdir("D:\\gsn_dataset\\2018")][-1:],
-        batch_size=3,
-        num_workers=2
-        )
+@hydra.main(config_path=".", config_name="config")
+def main(cfg: DictConfig):
+    wandb.login(key=cfg.wandb.key)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    experiment_id = f"experiment_{timestamp}"
 
-    dm.setup()
-
-    val_samples = next(iter(dm.val_dataloader()))
-    val_imgs, val_labels = val_samples[0], val_samples[1]
-    val_imgs.shape, val_labels.shape
-    wandb_logger = WandbLogger(project='wandb-lightning', job_type='train', )
-
-    early_stop_callback = EarlyStopping(
-       monitor='validation_loss',
-       patience=3,
-       verbose=False,
-       mode='min'
+    dataset = SEVIR_dataset(
+        file_paths=[os.path.join(cfg.dataset.dir, f) for f in os.listdir(cfg.dataset.dir)][:3],
+        step=cfg.dataset.step,
+        width=cfg.dataset.width,
+        height=cfg.dataset.height
     )
 
-    MODEL_CKPT_PATH = './model/'
-    MODEL_CKPT = 'model-{epoch:02d}-{validation_loss:.2f}'
+    dataloader = DataLoader(
+        dataset,
+        batch_size=cfg.dataloader.batch_size,
+        shuffle=cfg.dataloader.shuffle,
+        num_workers=cfg.dataloader.num_workers
+    )
+
+    early_stop_callback = EarlyStopping(
+        monitor=cfg.early_stopping.monitor,
+        patience=cfg.early_stopping.patience,
+        mode=cfg.early_stopping.mode,
+        verbose=cfg.early_stopping.verbose,
+    )
+
+    model_dir = os.path.join(cfg.checkpoint.dirpath, timestamp)
+    os.makedirs(model_dir, exist_ok=True)
 
     checkpoint_callback = ModelCheckpoint(
-        monitor='validation_loss',
-        dirpath=MODEL_CKPT_PATH,
-        filename=MODEL_CKPT,
-        save_top_k=3,
-        mode='min')
-
-    RNN_model = ConvRNNCell(
-        input_channels=1,
-        hidden_channels=4,
-        kernel_size=5,
-        depth=1,
-        activation=F.relu
-        )
+        monitor=cfg.checkpoint.monitor,
+        dirpath=model_dir,
+        filename=cfg.checkpoint.filename,
+        save_top_k=cfg.checkpoint.save_top_k,
+        mode=cfg.ckeckpoint.mode)
 
     main_model = RainPredictor(
-        model=RNN_model,
-        learning_rate=0.01,
-        loss_metrics=torchmetrics.MeanSquaredError(squared=True),
-        quality_metrics=torchmetrics.MeanSquaredError(squared=True), # JaccardIndex(num_classes=None, task="binary", threshold=0.5),#IOU
-        scheduler_step=7,
-        scheduler_gamma=0.9
+        model=instantiate(cfg.main_model.RNN_cell),
+        learning_rate=cfg.model.learning_rate,
+        loss_metrics=instantiate(cfg.main_model.loss_metrics),
+        scheduler_step=cfg.model.scheduler_step,
+        scheduler_gamma=cfg.model.scheduler_gamma
         )
 
     trainer = pl.Trainer(
         callbacks=[
             checkpoint_callback,
             early_stop_callback,
-            # ImagePredictionLogger(val_samples)
+            ImagePredictionLogger(val_samples)
             ],
-        logger=wandb_logger,
-        accelerator="cpu",
-        # devices=[0],
-        max_epochs=50
+        logger=WandbLogger(project=cfg.wandb.project_name, job_type='train', name=experiment_id),
+        accelerator=cfg.trainer.accelerator,
+        devices=cfg.trainer.devices,
+        max_epochs=cfg.trainer.max_epochs
         )
 
-    trainer.fit(main_model, dm)
+    trainer.fit(main_model, dataloader)
 
-    trainer.test(model=main_model, datamodule=dm)
+    trainer.test(model=main_model, datamodule=dataloader)
 
     wandb.finish()
 
-    run = wandb.init(project='GSN_rain_prediction', job_type='producer')
+    run = wandb.init(
+        project=cfg.wandb.project_name,
+        job_type='producer',
+        config=OmegaConf.to_container(cfg, resolve=True),
+        name=experiment_id
+    )
 
-    artifact = wandb.Artifact('model', type='model')
-    artifact.add_dir(MODEL_CKPT_PATH)
+    artifact = wandb.Artifact(f'model_{experiment_id}', type='model')
+    artifact.add_dir(model_dir)
 
     run.log_artifact(artifact)
     run.join()

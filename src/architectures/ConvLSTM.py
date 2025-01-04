@@ -2,19 +2,19 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class ConvLSTMCell(nn.Module):
     def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=F.relu):
         super().__init__()
         self.depth = depth
         self.hidden_channels = hidden_channels
         self.input_channels = input_channels
-        self.out_channels = 4*hidden_channels
 
         # idea of combining conv layers taken from: https://github.com/ndrplz/ConvLSTM_pytorch/blob/master/convlstm.py
         self.combined_conv_layers = nn.ModuleList([
             nn.Conv2d(
-                in_channels=hidden_channels + input_channels if i ==0 else 4*hidden_channels,
-                out_channels=self.out_channels,
+                in_channels=hidden_channels + input_channels if i == 0 else 4*hidden_channels,
+                out_channels=4*hidden_channels,
                 kernel_size=kernel_size,
                 padding=kernel_size // 2
             ) for i in range(depth)
@@ -25,7 +25,7 @@ class ConvLSTMCell(nn.Module):
         self.H = None
         self.C = None
 
-    def initialize_hidden_cell_state(self, batch_size, height, width, device):
+    def initialize_hidden_state(self, batch_size, height, width, device):
         self.H = torch.zeros(
             batch_size, self.hidden_channels, height, width, device=device
         )
@@ -36,7 +36,7 @@ class ConvLSTMCell(nn.Module):
     def forward(self, x):
         if self.H is None:
             batch_size, _, height, width = x.size()
-            self.initialize_hidden_cell_state(batch_size, height, width, x.device)
+            self.initialize_hidden_state(batch_size, height, width, x.device)
 
         combined = torch.cat([x, self.H], dim=1)        
 
