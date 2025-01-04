@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-#zastanowić się, czy liczba kanałów wyjściowych może być większa. I tak na koniec jest mapowanie z redukcją wymiarów
+
 class ConvRNNCell(nn.Module):
     def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=F.relu):
         super().__init__()
@@ -28,7 +28,6 @@ class ConvRNNCell(nn.Module):
             ) for i in range(depth)
         ])
 
-        #potencjalnie wyrzucić. I tak jest mapper
         self.output_layers = nn.ModuleList([
             nn.Conv2d(
                 in_channels=hidden_channels,
@@ -49,7 +48,6 @@ class ConvRNNCell(nn.Module):
             batch_size, self.hidden_channels, height, width, device=device
         )
 
-    #zastanowić się nad innymi aktywacjami. Jeśli na końcu używamy tanh, to relu nie mają sensu
     def forward(self, x, gen_output=False):
         if self.h_prev is None:
             batch_size, _, height, width = x.size()
@@ -63,10 +61,6 @@ class ConvRNNCell(nn.Module):
             h_prev = self.activation(layer(h_prev))
 
         h_next = F.tanh(x + h_prev + self.bias.view(1, -1, 1, 1))
-
-        #to było chyba dlatego, że mi odjebało xd
-        # for layer in self.output_layers:
-        #     h_next = self.activation(layer(h_next))
 
         self.h_prev = h_next
 

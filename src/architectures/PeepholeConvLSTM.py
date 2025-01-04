@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from ConvLSTM import ConvLSTMCell
 
+
 # extremaly small changes to convLSTM - if there's a time, the code should be reduced
 class ConvLSTMCell(ConvLSTMCell):
     def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=nn.ReLU):
@@ -14,7 +15,7 @@ class ConvLSTMCell(ConvLSTMCell):
         # idea of combining conv layers taken from: https://github.com/ndrplz/ConvLSTM_pytorch/blob/master/convlstm.py
         self.combined_conv_layers = nn.ModuleList([
             nn.Conv2d(
-                in_channels=2*hidden_channels + input_channels if i ==0 else 4*hidden_channels,
+                in_channels=2*hidden_channels + input_channels if i == 0 else 4*hidden_channels,
                 out_channels=self.out_channels,
                 kernel_size=kernel_size,
                 padding=kernel_size // 2
