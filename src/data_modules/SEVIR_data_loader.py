@@ -5,7 +5,7 @@ import pytorch_lightning as pl
 from torch.nn import functional as F
 import os
 from torchvision import transforms
-# from data_exploration import visualize_batch_tensor_interactive
+from data_exploration import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
@@ -126,12 +126,100 @@ class SEVIR_dataset(Dataset):
             frames.append(frame)
         return torch.stack(frames)
 
-if __name__ == "__main__":
-    # przykład użycia
+class ConvLSTMSevirDataModule(pl.LightningDataModule):
+    """
+    DataModule dla projektu z convLSTM na zbiorze SEVIR (kanał IR069).
+    W metodzie setup 3 dataset-y (train, val, test)
+    Domyślnie przypisujemy podział plików test,train,val jak na górze pliku.
+    """
 
-    # dataset przyjmuje step oraz szerokość i wysokość obrazka
+    def __init__(
+        self,
+        # parametry transformacji danych
+        step,
+        width,
+        height,
+        # przypisanie plików do zbiorów
+        train_files=train_files,
+        val_files=validate_files,
+        test_files=test_files,
+        file_paths=all_file_paths,
+        # parametry DataLoadera
+        batch_size=4,
+        num_workers=2
+    ):
+        super().__init__()
+        self.train_files = train_files
+        self.val_files = val_files
+        self.test_files = test_files
+        self.batch_size = batch_size
+        self.num_workers = num_workers
+        self.file_paths = file_paths
+        self.step = step
+        self.width = width
+        self.height = height
+
+        self.train_dataset = None
+        self.val_dataset = None
+        self.test_dataset = None
+
+
+    def prepare_data(self):
+        # zakładamy że pliki są już lokalnie.
+        # pobrane komendą z README
+        pass
+
+    def setup(self, stage=None):
+        # Tworzymy dataset-y.
+        if stage == 'fit' or stage is None:
+            self.train_dataset = SEVIR_dataset(self.train_files, self.step, self.width, self.height)
+            self.val_dataset   = SEVIR_dataset(self.val_files, self.step, self.width, self.height)
+
+        if stage == 'test' or stage is None:
+            self.test_dataset  = SEVIR_dataset(self.test_files, self.step, self.width, self.height)
+
+    def train_dataloader(self):
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers
+        )
+
+    def val_dataloader(self):
+        return DataLoader(
+            self.val_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers
+        )
+
+    def test_dataloader(self):
+        return DataLoader(
+            self.test_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers
+        )
+
+
+if __name__ == "__main__":
+    # przykład użycia oba przykłady są równoważne
+    # tylko jeden jest na pytorch a drugi na pytorch lighnting
+
+    ''' pytorch dataset '''
+    # przyjmuje step oraz szerokość i wysokość obrazka
     dataset = SEVIR_dataset(train_files, 3, 128, 128)
-    dataloader = DataLoader(dataset, batch_size=10, shuffle=True, num_workers=2)
+    dataloader = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=2)
     fist_sample = next(iter(dataloader))
-    print(fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
-    visualize_batch_tensor_interactive(fist_sample, 0, "SEVIR dataset")
+    print("data loader",fist_sample.shape) # zwraca torch.Size([10, 17, 128, 128])
+    # visualize_batch_tensor_interactive(fist_sample, 0, "SEVIR dataset")
+
+    ''' pytorch lightning datamodule '''
+    # przykład użycia
+    dm = ConvLSTMSevirDataModule(step=3, width=128, height=128, batch_size=4, num_workers=2)
+    dm.setup('fit')
+    train_loader = dm.train_dataloader()
+    batch = next(iter(train_loader))
+    print("data module",batch.shape) # zwraca torch.Size([4, 17, 128, 128
+    visualize_batch_tensor_interactive(batch, 0, "SEVIR dataset")
