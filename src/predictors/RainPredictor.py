@@ -51,12 +51,12 @@ class RainPredictor(pl.LightningModule):
         loss = self.compute_loss(outputs, y)
         return loss, outputs, y
 
-    def common_test_valid_step(self, batch, batch_idx):
-        loss, outputs, y = self.common_step(batch, batch_idx)
+    def common_test_valid_step(self, batch):
+        loss, outputs, y = self.common_step(batch)
         return loss
 
-    def training_step(self, batch, batch_idx):
-        loss, outputs, y = self.common_step(batch, batch_idx)
+    def training_step(self, batch):
+        loss, outputs, y = self.common_step(batch)
         self.training_step_outputs.append(loss)
         self.log_dict(
             {
@@ -74,8 +74,8 @@ class RainPredictor(pl.LightningModule):
         self.current_epoch_training_loss = outs.mean()
         self.training_step_outputs.clear()
 
-    def validation_step(self, batch, batch_idx):
-        loss, quality = self.common_test_valid_step(batch, batch_idx)
+    def validation_step(self, batch):
+        loss, quality = self.common_test_valid_step(batch)
         self.validation_step_outputs.append(loss)
         self.log_dict(
             {
@@ -94,8 +94,8 @@ class RainPredictor(pl.LightningModule):
         self.log('validation_loss', avg_loss, on_epoch=True)
         self.validation_step_outputs.clear()
 
-    def test_step(self, batch, batch_idx):
-        loss = self.common_test_valid_step(batch, batch_idx)
+    def test_step(self, batch):
+        loss = self.common_test_valid_step(batch)
         self.validation_step_outputs.append(loss)
         self.test_step_outputs.append(loss) # Not sure if it's ok.
         self.log_dict(
