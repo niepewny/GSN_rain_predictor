@@ -1,14 +1,17 @@
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+from src.data_modules.vizualization import visualize_batch_tensor_interactive
 
 
 class RainPredictor(pl.LightningModule):
 
-    def __init__(self, model, learning_rate, loss_metrics, scheduler_step, scheduler_gamma):
+    def __init__(self, model, mapping_activation,  learning_rate, loss_metrics, scheduler_step, scheduler_gamma):
         super().__init__()
 
         self.model = model
+        self.mapping_activation = mapping_activation
         self.lr = learning_rate
         self.loss = loss_metrics
         self.scheduler_step = scheduler_step
@@ -32,16 +35,17 @@ class RainPredictor(pl.LightningModule):
         for i in range(sequence_length):
             outputs = self.model(x[:, i], gen_output=(i == sequence_length-1))
         
-        outputs = self.mapping_layer(outputs)
+        outputs = self.mapping_activation(self.mapping_layer(outputs))
 
         return outputs
 
     def compute_loss(self, y_pred, y):
-        #todo
+        #todo - move to data module
         y = y.contiguous()
+        # visualize_batch_tensor_interactive(y.cpu())
+        # visualize_batch_tensor_interactive(y_pred.cpu())
         return self.loss(y_pred, y)
 
-    #todo: upewnić się, że w batchu można przekazywać x i y
     def common_step(self, batch):
         x = batch[:, :-1]
         y = batch[:, -1]
