@@ -11,8 +11,8 @@ wandb:
 
 data:
   dir: "D:\\gsn_dataset\\all"
-  sequence_length: 7
-  step: 6
+  sequence_length: 8
+  step: 4
   width: 64
   height: 64
   batch_size: 15
@@ -23,7 +23,7 @@ data:
 
 early_stopping:
   monitor: 'validation_loss'
-  patience: 5
+  patience: 6
   verbose: False
   mode: 'min'
 
@@ -41,7 +41,7 @@ model:
   RNN_cell_kernel_size: 7
   RNN_cell_hidden_channels: 8
   scheduler_step: 10
-  scheduler_gamma: 0.5
+  scheduler_gamma: 0.1
   learning_rate: 0.01
   RNN_cell:
     _target_: src.architectures.ConvRNN.ConvRNNCell
@@ -60,5 +60,5 @@ model:
 trainer:
   accelerator: "gpu"
   devices: [0]
-  max_epochs: 15
+  max_epochs: 50
   num_visualised_samples: 6
