@@ -11,7 +11,6 @@ class RainPredictor(pl.LightningModule):
         self.model = model
         self.lr = learning_rate
         self.loss = loss_metrics
-        self.quality_metric = type(self.quality).__name__
         self.scheduler_step = scheduler_step
         self.scheduler_gamma = scheduler_gamma
 
@@ -38,13 +37,12 @@ class RainPredictor(pl.LightningModule):
         return outputs
 
     def compute_loss(self, y_pred, y):
+        #todo
+        y = y.contiguous()
         return self.loss(y_pred, y)
 
+    #todo: upewnić się, że w batchu można przekazywać x i y
     def common_step(self, batch):
-        ### temp
-        batch = batch.permute(0, 3, 1, 2)
-        batch = batch.unsqueeze(2)
-        ###
         x = batch[:, :-1]
         y = batch[:, -1]
         outputs = self(x)
@@ -75,7 +73,7 @@ class RainPredictor(pl.LightningModule):
         self.training_step_outputs.clear()
 
     def validation_step(self, batch):
-        loss, quality = self.common_test_valid_step(batch)
+        loss = self.common_test_valid_step(batch)
         self.validation_step_outputs.append(loss)
         self.log_dict(
             {

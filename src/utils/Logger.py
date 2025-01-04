@@ -6,18 +6,20 @@ import numpy as np
 class ImagePredictionLogger(Callback):
     def __init__(self, val_samples, num_samples=1):
         super().__init__()
+
+        self.x = val_samples[:, :-1]
+        self.y = val_samples[:, -1]
         self.num_samples = num_samples
-        self.val_imgs, self.val_labels = val_samples
 
     def on_validation_epoch_end(self, trainer, model):
-        val_imgs = self.val_imgs.to(device=model.device)
-        output = model(val_imgs)
+        x = self.x.to(device=model.device)
+        outputs = model(x)
 
-        val_imgs = val_imgs[:self.num_samples].cpu().numpy()
-        predictions = output[:self.num_samples].cpu().detach().numpy()
+        y = self.y[:self.num_samples].cpu().numpy()
+        outputs = outputs[:self.num_samples].cpu().detach().numpy()
 
         logged_images = []
-        for true_img, pred_img in zip(val_imgs, predictions):
+        for true_img, pred_img in zip(y, outputs):
             combined_img = np.concatenate([true_img, pred_img], axis=2)
             normalized_img = (combined_img - combined_img.min()) / (combined_img.max() - combined_img.min())
             logged_images.append(

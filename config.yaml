@@ -1,16 +1,21 @@
+hydra:
+  run:
+    dir: outputs/${experiment_id}
+
+timestamp: ${now:%d_%H-%M-%S}
+experiment_id: ${model.RNN_cell_name}_D${model.RNN_cell.depth}_K${model.RNN_cell.kernel_size}_H${model.RNN_cell.hidden_channels}_SS${data.sequence_length}_${data.step}_${timestamp}
+
 wandb:
   key: "40c5c10f4b03fb955b2343280005f183c6e39d70"
   project_name: "GSN_rain_prediction"
 
-dataset:
+data:
   dir: "D:\\gsn_dataset\\2018"
-  step: 3
+  sequence_length: 3
+  step: 1
   width: 64
   height: 64
-
-dataLoader:
   batch_size: 10
-  shuffle: True
   num_workers: 2
 
 early_stopping:
@@ -26,22 +31,28 @@ checkpoint:
   save_top_k: 3
   mode: 'min'
 
-main_model:
-  RNN_cell:
-    _target_: src.architectures.ConvRNNCell
-    input_channels: 1
-    hidden_channels: 4
-    kernel_size: 5
-    depth: 1
-    activation: torch.nn.ReLU
-  loss_metrics:
-    _target_: torchmetrics.MeanSquaredError
-    squared: true    
+model:
+  RNN_cell_name: ConvRNN
+  input_channels: 1
+  RNN_cell_depth: 1
+  RNN_cell_kernel_size: 5
+  RNN_cell_hidden_channels: 4
   scheduler_step: 7
   scheduler_gamma: 0.9
   learning_rate: 0.01
+  RNN_cell:
+    _target_: src.architectures.ConvRNN.ConvRNNCell
+    input_channels: ${model.input_channels}
+    hidden_channels: ${model.RNN_cell_hidden_channels}
+    kernel_size: ${model.RNN_cell_kernel_size}
+    depth: ${model.RNN_cell_depth}
+    activation:
+      _target_: torch.nn.ReLU
+  loss_metrics:
+    _target_: torchmetrics.MeanSquaredError
+    squared: true   
 
 trainer:
   accelerator: "gpu"
   devices: [0]
-  max_epochs: 50
+  max_epochs: 4
