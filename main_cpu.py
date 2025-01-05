@@ -55,6 +55,7 @@ def main(cfg: DictConfig):
 
     main_model = RainPredictor(
         model=instantiate(cfg.model.RNN_cell),
+        mapping_activation=instantiate(cfg.model.mapper_activation),
         learning_rate=cfg.model.learning_rate,
         loss_metrics=instantiate(cfg.model.loss_metrics),
         scheduler_step=cfg.model.scheduler_step,
