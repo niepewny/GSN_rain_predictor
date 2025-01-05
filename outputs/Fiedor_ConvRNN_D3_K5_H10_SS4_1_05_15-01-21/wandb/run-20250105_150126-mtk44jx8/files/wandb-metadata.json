@@ -1,0 +1,30 @@
+{
+  "os":  "Linux-6.11.2-amd64-x86_64-with-glibc2.40",
+  "python":  "CPython 3.12.8",
+  "startedAt":  "2025-01-05T14:01:26.474771Z",
+  "program":  "/home/kolaj/my_project/AI/PyTorch/GSN_rain_predictor/main_cpu.py",
+  "codePath":  "main_cpu.py",
+  "git":  {
+    "remote":  "https://github.com/niepewny/GSN_rain_predictor.git",
+    "commit":  "8b3b6bf94545aef6027549e8ae4c191e0afc6fbe"
+  },
+  "email":  "wmakurat1@gmail.com",
+  "root":  ".",
+  "host":  "Kali",
+  "executable":  "/home/kolaj/my_project/AI/venvAI/bin/python",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "692156350464",
+      "used":  "614678528000"
+    }
+  },
+  "memory":  {
+    "total":  "16506351616"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  }
+}
