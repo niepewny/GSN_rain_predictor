@@ -7,7 +7,7 @@ import os
 import math
 from torchvision import transforms
 #from data_exploration import visualize_batch_tensor_interactive
-from src.data_modules.vizualization import visualize_batch_tensor_interactive
+from vizualization import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
@@ -236,12 +236,12 @@ if __name__ == "__main__":
     ''' pytorch lightning datamodule '''
     # # przykład użycia
     dm = ConvLSTMSevirDataModule(
-        step=3,
-        width=128,
-        height=128,
+        step=2,
+        width=192,
+        height=192,
         batch_size=4,
         num_workers=1,
-        sequence_length=15,
+        sequence_length=9,
         train_files_percent=0.7,
         val_files_percent=0.15,
         test_files_percent=0.15,
