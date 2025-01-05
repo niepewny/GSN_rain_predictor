@@ -35,7 +35,7 @@ checkpoint:
   mode: 'min'
 
 model:
-  RNN_cell_name: ConvRNN
+  RNN_cell_name: ConvLSTM
   input_channels: 1
   RNN_cell_depth: 1
   RNN_cell_kernel_size: 7
@@ -44,7 +44,7 @@ model:
   scheduler_gamma: 0.1
   learning_rate: 0.01
   RNN_cell:
-    _target_: src.architectures.ConvRNN.ConvRNNCell
+    _target_: src.architectures.ConvLSTM.ConvLSTMCell
     input_channels: ${model.input_channels}
     hidden_channels: ${model.RNN_cell_hidden_channels}
     kernel_size: ${model.RNN_cell_kernel_size}

@@ -9,12 +9,13 @@ class ConvLSTMCell(nn.Module):
         self.depth = depth
         self.hidden_channels = hidden_channels
         self.input_channels = input_channels
+        self.out_channels = 4*hidden_channels
 
         # idea of combining conv layers taken from: https://github.com/ndrplz/ConvLSTM_pytorch/blob/master/convlstm.py
         self.combined_conv_layers = nn.ModuleList([
             nn.Conv2d(
                 in_channels=hidden_channels + input_channels if i == 0 else 4*hidden_channels,
-                out_channels=4*hidden_channels,
+                out_channels=self.out_channels,
                 kernel_size=kernel_size,
                 padding=kernel_size // 2
             ) for i in range(depth)

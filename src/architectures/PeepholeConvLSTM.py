@@ -4,7 +4,7 @@ from ConvLSTM import ConvLSTMCell
 
 
 # extremaly small changes to convLSTM - if there's a time, the code should be reduced
-class ConvLSTMCell(ConvLSTMCell):
+class ConvPeepholeLSTMCell(ConvLSTMCell):
     def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=nn.ReLU):
         super().__init__()
         self.depth = depth

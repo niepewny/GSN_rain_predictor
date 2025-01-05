@@ -11,6 +11,7 @@ from omegaconf import DictConfig
 import wandb
 import os
 from omegaconf import OmegaConf
+from datetime import datetime
 
 # Custom
 from src.predictors.RainPredictor import RainPredictor
@@ -18,6 +19,7 @@ from src.data_modules.SEVIR_data_loader import ConvLSTMSevirDataModule
 from src.utils.Logger import ImagePredictionLogger
 
 
+OmegaConf.register_resolver("now", lambda pattern: datetime.now().strftime(pattern))
 @hydra.main(config_path=".", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
     wandb.login(key=cfg.wandb.key)
