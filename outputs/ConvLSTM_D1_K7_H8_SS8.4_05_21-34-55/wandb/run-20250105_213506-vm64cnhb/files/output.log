@@ -1,0 +1,17 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name               | Type             | Params
+--------------------------------------------------------
+0 | model              | ConvLSTMCell     | 14.1 K
+1 | mapping_activation | Softsign         | 0
+2 | loss               | MeanSquaredError | 0
+3 | mapping_layer      | Conv2d           | 9
+--------------------------------------------------------
+14.2 K    Trainable params
+0         Non-trainable params
+14.2 K    Total params
+0.057     Total estimated model params size (MB)
+Epoch 4:   0%|          | 0/633 [00:00<?, ?it/s, v_num=cnhb, validation_loss=0.066, train_loss=0.0598]           
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'train_dataloader' to speed up the dataloader worker initialization.
+                                                                          

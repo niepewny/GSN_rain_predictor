@@ -1,0 +1,8 @@
+{"time":"2025-01-05T18:55:31.141397+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-05T18:55:31.141397+01:00","level":"INFO","msg":"created symlink","path":"wandb\\run-20250105_185531-bco4am0h\\logs\\debug-core.log"}
+{"time":"2025-01-05T18:55:31.2645896+01:00","level":"INFO","msg":"created new stream","id":"bco4am0h"}
+{"time":"2025-01-05T18:55:31.2645896+01:00","level":"INFO","msg":"stream: started","id":"bco4am0h"}
+{"time":"2025-01-05T18:55:31.2645896+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"bco4am0h"}
+{"time":"2025-01-05T18:55:31.2645896+01:00","level":"INFO","msg":"handler: started","stream_id":"bco4am0h"}
+{"time":"2025-01-05T18:55:31.2645896+01:00","level":"INFO","msg":"sender: started","stream_id":"bco4am0h"}
+{"time":"2025-01-05T18:55:32.2348736+01:00","level":"INFO","msg":"Starting system monitor"}

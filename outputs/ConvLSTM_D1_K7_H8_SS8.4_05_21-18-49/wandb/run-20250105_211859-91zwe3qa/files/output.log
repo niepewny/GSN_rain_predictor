@@ -1,0 +1,60 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name               | Type             | Params
+--------------------------------------------------------
+0 | model              | ConvLSTMCell     | 14.1 K
+1 | mapping_activation | Softsign         | 0
+2 | loss               | MeanSquaredError | 0
+3 | mapping_layer      | Conv2d           | 9
+--------------------------------------------------------
+14.2 K    Trainable params
+0         Non-trainable params
+14.2 K    Total params
+0.057     Total estimated model params size (MB)
+Epoch 1: 100%|██████████| 633/633 [01:48<00:00,  5.85it/s, v_num=e3qa, validation_loss=0.114, train_loss=0.0524]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'train_dataloader' to speed up the dataloader worker initialization.
+Validation DataLoader 0: 100%|██████████| 136/136 [00:19<00:00,  6.84it/s]
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\main.py", line 85, in main
+    trainer.fit(main_model, dm)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 545, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 581, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 990, in _run
+    results = self._run_stage()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1036, in _run_stage
+    self.fit_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\fit_loop.py", line 202, in run
+    self.advance()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\fit_loop.py", line 359, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\training_epoch_loop.py", line 137, in run
+    self.on_advance_end(data_fetcher)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\training_epoch_loop.py", line 285, in on_advance_end
+    self.val_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\utilities.py", line 181, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 141, in run
+    return self.on_run_end()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 253, in on_run_end
+    self._on_evaluation_epoch_end()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 328, in _on_evaluation_epoch_end
+    call._call_callback_hooks(trainer, hook_name)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 208, in _call_callback_hooks
+    fn(trainer, trainer.lightning_module, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\utils\Logger.py", line 26, in on_validation_epoch_end
+    wandb.Image(normalized_img, caption="Ground Truth | Prediction")
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\wandb\sdk\data_types\image.py", line 182, in __init__
+    self._initialize_from_data(data_or_path, mode, file_type)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\wandb\sdk\data_types\image.py", line 339, in _initialize_from_data
+    self._image.save(tmp_path, transparency=None)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\PIL\Image.py", line 2600, in save
+    fp = builtins.open(filename, "w+b")
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Wojtas\\AppData\\Local\\Temp\\tmpl8oo_7egwandb-media\\21076tos.png'
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

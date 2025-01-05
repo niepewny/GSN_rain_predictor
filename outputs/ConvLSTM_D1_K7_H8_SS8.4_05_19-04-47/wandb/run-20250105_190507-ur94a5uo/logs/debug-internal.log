@@ -1,0 +1,8 @@
+{"time":"2025-01-05T19:05:07.5034481+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-05T19:05:07.5034481+01:00","level":"INFO","msg":"created symlink","path":"wandb\\run-20250105_190507-ur94a5uo\\logs\\debug-core.log"}
+{"time":"2025-01-05T19:05:07.6368399+01:00","level":"INFO","msg":"created new stream","id":"ur94a5uo"}
+{"time":"2025-01-05T19:05:07.6368399+01:00","level":"INFO","msg":"stream: started","id":"ur94a5uo"}
+{"time":"2025-01-05T19:05:07.6368399+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"ur94a5uo"}
+{"time":"2025-01-05T19:05:07.6368399+01:00","level":"INFO","msg":"sender: started","stream_id":"ur94a5uo"}
+{"time":"2025-01-05T19:05:07.6373488+01:00","level":"INFO","msg":"handler: started","stream_id":"ur94a5uo"}
+{"time":"2025-01-05T19:05:08.2237336+01:00","level":"INFO","msg":"Starting system monitor"}
