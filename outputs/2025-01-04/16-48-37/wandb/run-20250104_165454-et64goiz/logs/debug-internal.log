@@ -1,0 +1,17 @@
+{"time":"2025-01-04T16:54:54.0365173+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T16:54:54.0365173+01:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\Wojtas\\Desktop\\gsn\\GSN_rain_predictor\\outputs\\2025-01-04\\16-48-37\\wandb\\run-20250104_165454-et64goiz\\logs\\debug-core.log"}
+{"time":"2025-01-04T16:54:54.1523799+01:00","level":"INFO","msg":"created new stream","id":"et64goiz"}
+{"time":"2025-01-04T16:54:54.1523799+01:00","level":"INFO","msg":"stream: started","id":"et64goiz"}
+{"time":"2025-01-04T16:54:54.1523799+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"et64goiz"}
+{"time":"2025-01-04T16:54:54.1523799+01:00","level":"INFO","msg":"handler: started","stream_id":"et64goiz"}
+{"time":"2025-01-04T16:54:54.1523799+01:00","level":"INFO","msg":"sender: started","stream_id":"et64goiz"}
+{"time":"2025-01-04T16:54:54.5228094+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T16:54:55.0400294+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T16:54:55.0405779+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T16:54:56.0541631+01:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading artifact model_ConvRNNCell_D1_K5_H4_SS3.1_04-16-48-38","runtime_seconds":1.0173404,"subtasks":[{"desc":"model-epoch=02-validation_loss=1.35.ckpt","runtime_seconds":0.2897285,"progress":"21.7KB/21.7KB"},{"desc":"model-epoch=00-validation_loss=1.33.ckpt","runtime_seconds":0.2897285,"progress":"21.2KB/21.2KB"},{"desc":"model-epoch=01-validation_loss=1.36.ckpt","runtime_seconds":0.2897285,"progress":"21.6KB/21.6KB"}]}],"total_operations":1}}
+{"time":"2025-01-04T16:54:57.4266852+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T16:54:58.7002175+01:00","level":"INFO","msg":"stream: closing","id":"et64goiz"}
+{"time":"2025-01-04T16:54:58.7002175+01:00","level":"INFO","msg":"handler: closed","stream_id":"et64goiz"}
+{"time":"2025-01-04T16:54:58.7002175+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"et64goiz"}
+{"time":"2025-01-04T16:54:58.7002175+01:00","level":"INFO","msg":"sender: closed","stream_id":"et64goiz"}
+{"time":"2025-01-04T16:54:58.7002175+01:00","level":"INFO","msg":"stream: closed","id":"et64goiz"}

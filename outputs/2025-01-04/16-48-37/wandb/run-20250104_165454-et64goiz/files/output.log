@@ -1,0 +1,2 @@
+wandb: Adding directory to artifact (.\model\ConvRNNCell_D1_K5_H4_SS3.1_04-16-48-38)... Done. 0.1s
+wandb: WARNING wandb.run.join() is deprecated, please use wandb.run.finish().

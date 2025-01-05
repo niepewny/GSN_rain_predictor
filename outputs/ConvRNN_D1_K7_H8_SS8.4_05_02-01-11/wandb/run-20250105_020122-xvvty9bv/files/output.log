@@ -1,0 +1,18 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name               | Type             | Params
+--------------------------------------------------------
+0 | model              | ConvRNNCell      | 3.9 K
+1 | mapping_activation | Softsign         | 0
+2 | loss               | MeanSquaredError | 0
+3 | mapping_layer      | Conv2d           | 2
+--------------------------------------------------------
+3.9 K     Trainable params
+0         Non-trainable params
+3.9 K     Total params
+0.016     Total estimated model params size (MB)
+Testing: |                                                                                                                           | 0/? [00:00<?, ?it/s]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py:54: Detected KeyboardInterrupt, attempting graceful shutdown...
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'test_dataloader' to speed up the dataloader worker initialization.

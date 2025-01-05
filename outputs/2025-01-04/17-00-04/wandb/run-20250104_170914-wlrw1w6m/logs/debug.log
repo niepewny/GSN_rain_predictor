@@ -1,0 +1,29 @@
+2025-01-04 17:09:14,596 INFO    MainThread:23364 [wandb_setup.py:_flush():68] Current SDK version is 0.19.1
+2025-01-04 17:09:14,596 INFO    MainThread:23364 [wandb_setup.py:_flush():68] Configure stats pid to 23364
+2025-01-04 17:09:14,596 INFO    MainThread:23364 [wandb_setup.py:_flush():68] Loading settings from C:\Users\Wojtas\.config\wandb\settings
+2025-01-04 17:09:14,596 INFO    MainThread:23364 [wandb_setup.py:_flush():68] Loading settings from C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\outputs\2025-01-04\17-00-04\wandb\settings
+2025-01-04 17:09:14,596 INFO    MainThread:23364 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2025-01-04 17:09:14,597 INFO    MainThread:23364 [wandb_init.py:_log_setup():528] Logging user logs to C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\outputs\2025-01-04\17-00-04\wandb\run-20250104_170914-wlrw1w6m\logs\debug.log
+2025-01-04 17:09:14,597 INFO    MainThread:23364 [wandb_init.py:_log_setup():529] Logging internal logs to C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\outputs\2025-01-04\17-00-04\wandb\run-20250104_170914-wlrw1w6m\logs\debug-internal.log
+2025-01-04 17:09:14,597 INFO    MainThread:23364 [wandb_init.py:init():644] calling init triggers
+2025-01-04 17:09:14,598 INFO    MainThread:23364 [wandb_init.py:init():650] wandb.init called with sweep_config: {}
+config: {'wandb': {'key': '40c5c10f4b03fb955b2343280005f183c6e39d70', 'project_name': 'GSN_rain_prediction'}, 'data': {'dir': 'D:\\gsn_dataset\\2018', 'sequence_length': 3, 'step': 1, 'width': 64, 'height': 64, 'batch_size': 10, 'num_workers': 2}, 'early_stopping': {'monitor': 'validation_loss', 'patience': 3, 'verbose': False, 'mode': 'min'}, 'checkpoint': {'monitor': 'validation_loss', 'dirpath': './model/', 'filename': 'model-{epoch:02d}-{validation_loss:.2f}', 'save_top_k': 3, 'mode': 'min'}, 'model': {'RNN_cell': {'_target_': 'src.architectures.ConvRNN.ConvRNNCell', 'input_channels': 1, 'hidden_channels': 4, 'kernel_size': 5, 'depth': 1, 'activation': {'_target_': 'torch.nn.ReLU'}}, 'loss_metrics': {'_target_': 'torchmetrics.MeanSquaredError', 'squared': True}, 'scheduler_step': 7, 'scheduler_gamma': 0.9, 'learning_rate': 0.01}, 'trainer': {'accelerator': 'gpu', 'devices': [0], 'max_epochs': 4}}
+2025-01-04 17:09:14,598 INFO    MainThread:23364 [wandb_init.py:init():680] starting backend
+2025-01-04 17:09:14,598 INFO    MainThread:23364 [wandb_init.py:init():684] sending inform_init request
+2025-01-04 17:09:14,601 INFO    MainThread:23364 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2025-01-04 17:09:14,602 INFO    MainThread:23364 [wandb_init.py:init():697] backend started and connected
+2025-01-04 17:09:14,604 INFO    MainThread:23364 [wandb_init.py:init():790] updated telemetry
+2025-01-04 17:09:14,667 INFO    MainThread:23364 [wandb_init.py:init():822] communicating run to backend with 90.0 second timeout
+2025-01-04 17:09:15,002 INFO    MainThread:23364 [wandb_init.py:init():874] starting run threads in backend
+2025-01-04 17:09:15,182 INFO    MainThread:23364 [wandb_run.py:_console_start():2374] atexit reg
+2025-01-04 17:09:15,182 INFO    MainThread:23364 [wandb_run.py:_redirect():2224] redirect: wrap_raw
+2025-01-04 17:09:15,182 INFO    MainThread:23364 [wandb_run.py:_redirect():2289] Wrapping output streams.
+2025-01-04 17:09:15,182 INFO    MainThread:23364 [wandb_run.py:_redirect():2314] Redirects installed.
+2025-01-04 17:09:15,183 INFO    MainThread:23364 [wandb_init.py:init():916] run started, returning control to user process
+2025-01-04 17:09:15,490 INFO    MainThread:23364 [wandb_run.py:_finish():2100] finishing run wmakurat1-pw/GSN_rain_prediction/wlrw1w6m
+2025-01-04 17:09:15,490 INFO    MainThread:23364 [wandb_run.py:_atexit_cleanup():2339] got exitcode: 0
+2025-01-04 17:09:15,491 INFO    MainThread:23364 [wandb_run.py:_restore():2321] restore
+2025-01-04 17:09:15,491 INFO    MainThread:23364 [wandb_run.py:_restore():2327] restore done
+2025-01-04 17:09:19,346 INFO    MainThread:23364 [wandb_run.py:_footer_history_summary_info():3892] rendering history
+2025-01-04 17:09:19,346 INFO    MainThread:23364 [wandb_run.py:_footer_history_summary_info():3924] rendering summary
+2025-01-04 17:09:19,352 INFO    MainThread:23364 [wandb_run.py:_footer_sync_info():3853] logging synced files

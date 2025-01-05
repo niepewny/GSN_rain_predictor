@@ -1,0 +1,17 @@
+{"time":"2025-01-04T15:18:15.2807571+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T15:18:15.2807571+01:00","level":"INFO","msg":"created symlink","path":"wandb\\run-20250104_151815-brueju2t\\logs\\debug-core.log"}
+{"time":"2025-01-04T15:18:15.4014176+01:00","level":"INFO","msg":"created new stream","id":"brueju2t"}
+{"time":"2025-01-04T15:18:15.4014176+01:00","level":"INFO","msg":"stream: started","id":"brueju2t"}
+{"time":"2025-01-04T15:18:15.4014176+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"brueju2t"}
+{"time":"2025-01-04T15:18:15.402433+01:00","level":"INFO","msg":"sender: started","stream_id":"brueju2t"}
+{"time":"2025-01-04T15:18:15.402433+01:00","level":"INFO","msg":"handler: started","stream_id":"brueju2t"}
+{"time":"2025-01-04T15:18:16.1220205+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T15:40:28.642735+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T15:40:28.6443357+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T15:40:29.3311516+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T15:40:29.6507964+01:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading console lines 18-23","runtime_seconds":0.0478099}],"total_operations":1}}
+{"time":"2025-01-04T15:40:30.888212+01:00","level":"INFO","msg":"stream: closing","id":"brueju2t"}
+{"time":"2025-01-04T15:40:30.888212+01:00","level":"INFO","msg":"handler: closed","stream_id":"brueju2t"}
+{"time":"2025-01-04T15:40:30.888212+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"brueju2t"}
+{"time":"2025-01-04T15:40:30.888212+01:00","level":"INFO","msg":"sender: closed","stream_id":"brueju2t"}
+{"time":"2025-01-04T15:40:30.8887684+01:00","level":"INFO","msg":"stream: closed","id":"brueju2t"}

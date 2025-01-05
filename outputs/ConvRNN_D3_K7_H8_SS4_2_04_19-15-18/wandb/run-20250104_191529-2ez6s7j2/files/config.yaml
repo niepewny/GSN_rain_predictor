@@ -1,0 +1,159 @@
+_wandb:
+    value:
+        cli_version: 0.19.1
+        m:
+            - "1": examples.captions
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": trainer/global_step
+              "6":
+                - 3
+              "7": []
+            - "1": validation_loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.height
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.format
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.count
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.filenames
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train_loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.width
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": epoch
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+        python_version: 3.10.0
+        t:
+            "1":
+                - 1
+                - 9
+                - 41
+                - 50
+                - 55
+                - 103
+            "2":
+                - 1
+                - 9
+                - 41
+                - 50
+                - 55
+                - 103
+            "3":
+                - 7
+                - 13
+                - 16
+                - 23
+                - 55
+                - 66
+            "4": 3.10.0
+            "5": 0.19.1
+            "8":
+                - 3
+                - 5
+            "12": 0.19.1
+            "13": windows-amd64
+checkpoint:
+    value:
+        dirpath: ./model/
+        filename: model-{epoch:02d}-{validation_loss:.2f}
+        mode: min
+        monitor: validation_loss
+        save_top_k: 3
+data:
+    value:
+        batch_size: 10
+        dir: D:\gsn_dataset\all
+        height: 64
+        num_workers: 2
+        sequence_length: 4
+        step: 2
+        test_files_percent: 0.15
+        train_files_percent: 0.7
+        val_files_percent: 0.15
+        width: 64
+early_stopping:
+    value:
+        mode: min
+        monitor: validation_loss
+        patience: 4
+        verbose: false
+experiment_id:
+    value: ConvRNN_D3_K7_H8_SS4_2_04_19-15-18
+model:
+    value:
+        RNN_cell:
+            _target_: src.architectures.ConvRNN.ConvRNNCell
+            activation:
+                _target_: torch.nn.ReLU
+            depth: 3
+            hidden_channels: 8
+            input_channels: 1
+            kernel_size: 7
+        RNN_cell_depth: 3
+        RNN_cell_hidden_channels: 8
+        RNN_cell_kernel_size: 7
+        RNN_cell_name: ConvRNN
+        input_channels: 1
+        learning_rate: 0.01
+        loss_metrics:
+            _target_: torchmetrics.MeanSquaredError
+            squared: true
+        scheduler_gamma: 0.9
+        scheduler_step: 7
+timestamp:
+    value: 04_19-15-18
+trainer:
+    value:
+        accelerator: gpu
+        devices:
+            - 0
+        max_epochs: 15
+        num_visualised_samples: 6
+wandb:
+    value:
+        key: 40c5c10f4b03fb955b2343280005f183c6e39d70
+        project_name: GSN_rain_prediction

@@ -1,0 +1,22 @@
+2025-01-04 15:01:49,294 INFO    MainThread:23964 [wandb_setup.py:_flush():68] Current SDK version is 0.19.1
+2025-01-04 15:01:49,294 INFO    MainThread:23964 [wandb_setup.py:_flush():68] Configure stats pid to 23964
+2025-01-04 15:01:49,294 INFO    MainThread:23964 [wandb_setup.py:_flush():68] Loading settings from C:\Users\Wojtas\.config\wandb\settings
+2025-01-04 15:01:49,294 INFO    MainThread:23964 [wandb_setup.py:_flush():68] Loading settings from C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\outputs\2025-01-04\15-00-13\wandb\settings
+2025-01-04 15:01:49,294 INFO    MainThread:23964 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2025-01-04 15:01:49,294 INFO    MainThread:23964 [wandb_init.py:_log_setup():528] Logging user logs to .\wandb\run-20250104_150149-au1l6nc4\logs\debug.log
+2025-01-04 15:01:49,295 INFO    MainThread:23964 [wandb_init.py:_log_setup():529] Logging internal logs to .\wandb\run-20250104_150149-au1l6nc4\logs\debug-internal.log
+2025-01-04 15:01:49,295 INFO    MainThread:23964 [wandb_init.py:init():644] calling init triggers
+2025-01-04 15:01:49,295 INFO    MainThread:23964 [wandb_init.py:init():650] wandb.init called with sweep_config: {}
+config: {'wandb': {'key': '40c5c10f4b03fb955b2343280005f183c6e39d70', 'project_name': 'GSN_rain_prediction'}, 'data': {'dir': 'D:\\gsn_dataset\\2018', 'sequence_length': 3, 'step': 1, 'width': 64, 'height': 64, 'batch_size': 10, 'num_workers': 2}, 'early_stopping': {'monitor': 'validation_loss', 'patience': 3, 'verbose': False, 'mode': 'min'}, 'checkpoint': {'monitor': 'validation_loss', 'dirpath': './model/', 'filename': 'model-{epoch:02d}-{validation_loss:.2f}', 'save_top_k': 3, 'mode': 'min'}, 'model': {'RNN_cell': {'_target_': 'src.architectures.ConvRNN.ConvRNNCell', 'input_channels': 1, 'hidden_channels': 4, 'kernel_size': 5, 'depth': 1, 'activation': {'_target_': 'torch.nn.ReLU'}}, 'loss_metrics': {'_target_': 'torchmetrics.MeanSquaredError', 'squared': True}, 'scheduler_step': 7, 'scheduler_gamma': 0.9, 'learning_rate': 0.01}, 'trainer': {'accelerator': 'gpu', 'devices': [0], 'max_epochs': 50}}
+2025-01-04 15:01:49,295 INFO    MainThread:23964 [wandb_init.py:init():680] starting backend
+2025-01-04 15:01:49,295 INFO    MainThread:23964 [wandb_init.py:init():684] sending inform_init request
+2025-01-04 15:01:49,328 INFO    MainThread:23964 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2025-01-04 15:01:49,331 INFO    MainThread:23964 [wandb_init.py:init():697] backend started and connected
+2025-01-04 15:01:49,334 INFO    MainThread:23964 [wandb_init.py:init():790] updated telemetry
+2025-01-04 15:01:49,387 INFO    MainThread:23964 [wandb_init.py:init():822] communicating run to backend with 90.0 second timeout
+2025-01-04 15:01:50,562 INFO    MainThread:23964 [wandb_init.py:init():874] starting run threads in backend
+2025-01-04 15:01:52,265 INFO    MainThread:23964 [wandb_run.py:_console_start():2374] atexit reg
+2025-01-04 15:01:52,265 INFO    MainThread:23964 [wandb_run.py:_redirect():2224] redirect: wrap_raw
+2025-01-04 15:01:52,266 INFO    MainThread:23964 [wandb_run.py:_redirect():2289] Wrapping output streams.
+2025-01-04 15:01:52,266 INFO    MainThread:23964 [wandb_run.py:_redirect():2314] Redirects installed.
+2025-01-04 15:01:52,274 INFO    MainThread:23964 [wandb_init.py:init():916] run started, returning control to user process

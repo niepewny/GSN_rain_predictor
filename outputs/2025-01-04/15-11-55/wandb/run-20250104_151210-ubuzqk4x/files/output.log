@@ -1,0 +1,81 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | model         | ConvRNNCell      | 613
+1 | loss          | MeanSquaredError | 0
+2 | mapping_layer | Conv2d           | 2
+---------------------------------------------------
+615       Trainable params
+0         Non-trainable params
+615       Total params
+0.002     Total estimated model params size (MB)
+Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]Backend tkagg is interactive backend. Turning interactive mode on.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 394, in _run_hydra
+    _run_app(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 457, in _run_app
+    run_and_report(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 223, in run_and_report
+    raise ex
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 220, in run_and_report
+    return func()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 458, in <lambda>
+    lambda: hydra.run(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\hydra.py", line 132, in run
+    _ = ret.return_value
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\core\utils.py", line 260, in return_value
+    raise self._return_value
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\core\utils.py", line 186, in run_job
+    ret.return_value = task_function(task_cfg)
+  File "C:/Users/Wojtas/Desktop/gsn/GSN_rain_predictor/main.py", line 97, in main
+    trainer.fit(main_model, dm)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 545, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 581, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 990, in _run
+    results = self._run_stage()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1034, in _run_stage
+    self._run_sanity_check()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1063, in _run_sanity_check
+    val_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\utilities.py", line 181, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 134, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 391, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 309, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 403, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 74, in validation_step
+    loss = self.common_test_valid_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 51, in common_test_valid_step
+    loss, outputs, y = self.common_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 47, in common_step
+    loss = self.compute_loss(outputs, y)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 40, in compute_loss
+    return self.loss(y_pred, y)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torchmetrics\metric.py", line 316, in forward
+    self._forward_cache = self._forward_reduce_state_update(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torchmetrics\metric.py", line 385, in _forward_reduce_state_update
+    self.update(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torchmetrics\metric.py", line 560, in wrapped_func
+    raise err
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torchmetrics\metric.py", line 550, in wrapped_func
+    update(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torchmetrics\regression\mse.py", line 103, in update
+    sum_squared_error, num_obs = _mean_squared_error_update(preds, target, num_outputs=self.num_outputs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torchmetrics\functional\regression\mse.py", line 36, in _mean_squared_error_update
+    target = target.view(-1)
+RuntimeError: view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.

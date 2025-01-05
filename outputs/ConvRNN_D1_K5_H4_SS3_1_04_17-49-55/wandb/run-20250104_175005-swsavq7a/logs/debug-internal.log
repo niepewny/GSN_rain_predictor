@@ -1,0 +1,8 @@
+{"time":"2025-01-04T17:50:05.8197132+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T17:50:05.8197132+01:00","level":"INFO","msg":"created symlink","path":"wandb\\run-20250104_175005-swsavq7a\\logs\\debug-core.log"}
+{"time":"2025-01-04T17:50:05.9389451+01:00","level":"INFO","msg":"created new stream","id":"swsavq7a"}
+{"time":"2025-01-04T17:50:05.9389451+01:00","level":"INFO","msg":"stream: started","id":"swsavq7a"}
+{"time":"2025-01-04T17:50:05.9389451+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"swsavq7a"}
+{"time":"2025-01-04T17:50:05.9389451+01:00","level":"INFO","msg":"handler: started","stream_id":"swsavq7a"}
+{"time":"2025-01-04T17:50:05.9389451+01:00","level":"INFO","msg":"sender: started","stream_id":"swsavq7a"}
+{"time":"2025-01-04T17:50:06.5293437+01:00","level":"INFO","msg":"Starting system monitor"}

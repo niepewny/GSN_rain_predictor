@@ -1,0 +1,20 @@
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\callbacks\model_checkpoint.py:630: Checkpoint directory . exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | model         | ConvRNNCell      | 613
+1 | loss          | MeanSquaredError | 0
+2 | mapping_layer | Conv2d           | 2
+---------------------------------------------------
+615       Trainable params
+0         Non-trainable params
+615       Total params
+0.002     Total estimated model params size (MB)
+Testing: |          | 28/? [00:12<00:00,  2.20it/s]04it/s, v_num=vq7a, validation_loss=1.320, train_loss=1.460]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'train_dataloader' to speed up the dataloader worker initialization.
+Validation DataLoader 0:  41%|████▏     | 202/489 [00:16<00:23, 12.07it/s]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py:54: Detected KeyboardInterrupt, attempting graceful shutdown...
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'test_dataloader' to speed up the dataloader worker initialization.

@@ -1,0 +1,70 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | model         | ConvRNNCell      | 22.8 K
+1 | loss          | MeanSquaredError | 0
+2 | mapping_layer | Conv2d           | 2
+---------------------------------------------------
+22.8 K    Trainable params
+0         Non-trainable params
+22.8 K    Total params
+0.091     Total estimated model params size (MB)
+Epoch 4: 100%|██████████████| 949/949 [02:59<00:00,  5.28it/s, v_num=s7j2, validation_loss=1.450, train_loss=1.540]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'train_dataloader' to speed up the dataloader worker initialization.
+Validation: |                                                                                | 0/? [00:00<?, ?it/s]
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\utils\data\dataloader.py", line 1243, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+  File "C:\Users\Wojtas\AppData\Local\Programs\Python\Python310\lib\multiprocessing\queues.py", line 114, in get
+    raise Empty
+_queue.Empty
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\main.py", line 82, in main
+    trainer.fit(main_model, dm)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 545, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 581, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 990, in _run
+    results = self._run_stage()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1036, in _run_stage
+    self.fit_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\fit_loop.py", line 202, in run
+    self.advance()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\fit_loop.py", line 359, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\training_epoch_loop.py", line 137, in run
+    self.on_advance_end(data_fetcher)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\training_epoch_loop.py", line 285, in on_advance_end
+    self.val_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\utilities.py", line 181, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 127, in run
+    batch, batch_idx, dataloader_idx = next(data_fetcher)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\fetchers.py", line 127, in __next__
+    batch = super().__next__()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\fetchers.py", line 56, in __next__
+    batch = next(self.iterator)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\utilities\combined_loader.py", line 326, in __next__
+    out = next(self._iterator)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\utilities\combined_loader.py", line 132, in __next__
+    out = next(self.iterators[0])
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\utils\data\dataloader.py", line 701, in __next__
+    data = self._next_data()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\utils\data\dataloader.py", line 1448, in _next_data
+    idx, data = self._get_data()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\utils\data\dataloader.py", line 1412, in _get_data
+    success, data = self._try_get_data()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\utils\data\dataloader.py", line 1256, in _try_get_data
+    raise RuntimeError(
+RuntimeError: DataLoader worker (pid(s) 11552, 19912) exited unexpectedly
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

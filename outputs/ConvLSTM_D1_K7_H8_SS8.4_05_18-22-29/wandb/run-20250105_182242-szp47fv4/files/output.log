@@ -1,0 +1,60 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name               | Type             | Params
+--------------------------------------------------------
+0 | model              | ConvLSTMCell     | 14.1 K
+1 | mapping_activation | Softsign         | 0
+2 | loss               | MeanSquaredError | 0
+3 | mapping_layer      | Conv2d           | 33
+--------------------------------------------------------
+14.2 K    Trainable params
+0         Non-trainable params
+14.2 K    Total params
+0.057     Total estimated model params size (MB)
+Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\main.py", line 85, in main
+    trainer.fit(main_model, dm)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 545, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 581, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 990, in _run
+    results = self._run_stage()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1034, in _run_stage
+    self._run_sanity_check()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1063, in _run_sanity_check
+    val_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\utilities.py", line 181, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 134, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 391, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 309, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 403, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 80, in validation_step
+    loss = self.common_test_valid_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 57, in common_test_valid_step
+    loss, outputs, y = self.common_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 52, in common_step
+    outputs = self(x)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 36, in forward
+    outputs = self.model(x[:, i], gen_output=(i == sequence_length-1))
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+TypeError: ConvLSTMCell.forward() got an unexpected keyword argument 'gen_output'
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

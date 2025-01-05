@@ -1,0 +1,17 @@
+{"time":"2025-01-04T17:54:57.489646+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T17:54:57.489646+01:00","level":"INFO","msg":"created symlink","path":"wandb\\run-20250104_175457-ha6dpqtl\\logs\\debug-core.log"}
+{"time":"2025-01-04T17:54:57.6111833+01:00","level":"INFO","msg":"created new stream","id":"ha6dpqtl"}
+{"time":"2025-01-04T17:54:57.6112888+01:00","level":"INFO","msg":"stream: started","id":"ha6dpqtl"}
+{"time":"2025-01-04T17:54:57.6114719+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"ha6dpqtl"}
+{"time":"2025-01-04T17:54:57.6116041+01:00","level":"INFO","msg":"handler: started","stream_id":"ha6dpqtl"}
+{"time":"2025-01-04T17:54:57.6116041+01:00","level":"INFO","msg":"sender: started","stream_id":"ha6dpqtl"}
+{"time":"2025-01-04T17:54:58.1634652+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T18:03:22.9856313+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T18:03:22.9872951+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T18:03:23.7404426+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T18:03:24.0001032+01:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading console lines 19-24","runtime_seconds":0.0111182}],"total_operations":1}}
+{"time":"2025-01-04T18:03:25.2560815+01:00","level":"INFO","msg":"stream: closing","id":"ha6dpqtl"}
+{"time":"2025-01-04T18:03:25.2560815+01:00","level":"INFO","msg":"handler: closed","stream_id":"ha6dpqtl"}
+{"time":"2025-01-04T18:03:25.2560815+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ha6dpqtl"}
+{"time":"2025-01-04T18:03:25.2560815+01:00","level":"INFO","msg":"sender: closed","stream_id":"ha6dpqtl"}
+{"time":"2025-01-04T18:03:25.2560815+01:00","level":"INFO","msg":"stream: closed","id":"ha6dpqtl"}

@@ -1,0 +1,133 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | model         | ConvRNNCell      | 22.8 K
+1 | loss          | MeanSquaredError | 0
+2 | mapping_layer | Conv2d           | 2
+---------------------------------------------------
+22.8 K    Trainable params
+0         Non-trainable params
+22.8 K    Total params
+0.091     Total estimated model params size (MB)
+Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]Backend tkagg is interactive backend. Turning interactive mode on.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 394, in _run_hydra
+    _run_app(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 457, in _run_app
+    run_and_report(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 223, in run_and_report
+    raise ex
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 220, in run_and_report
+    return func()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 458, in <lambda>
+    lambda: hydra.run(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\hydra.py", line 132, in run
+    _ = ret.return_value
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\core\utils.py", line 260, in return_value
+    raise self._return_value
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\core\utils.py", line 186, in run_job
+    ret.return_value = task_function(task_cfg)
+  File "C:/Users/Wojtas/Desktop/gsn/GSN_rain_predictor/main.py", line 82, in main
+    trainer.fit(main_model, dm)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 545, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 581, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 990, in _run
+    results = self._run_stage()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1034, in _run_stage
+    self._run_sanity_check()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1063, in _run_sanity_check
+    val_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\utilities.py", line 181, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 134, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 391, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 309, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 403, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 79, in validation_step
+    loss = self.common_test_valid_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 56, in common_test_valid_step
+    loss, outputs, y = self.common_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 52, in common_step
+    loss = self.compute_loss(outputs, y)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 43, in compute_loss
+    visualize_batch_tensor_interactive(y)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\data_modules\vizualization.py", line 27, in visualize_batch_tensor_interactive
+    tensor = tensor[batch_idx].squeeze(1).numpy()  # Now shape is [sequence, height, width]
+TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.
+Traceback (most recent call last):
+  File "D:\PyCharm Community Edition 2022.1.1\plugins\python-ce\helpers\pydev\pydevd.py", line 2181, in <module>
+    main()
+  File "D:\PyCharm Community Edition 2022.1.1\plugins\python-ce\helpers\pydev\pydevd.py", line 2172, in main
+    globals = debugger.run(setup['file'], None, None, is_module)
+  File "D:\PyCharm Community Edition 2022.1.1\plugins\python-ce\helpers\pydev\pydevd.py", line 1484, in run
+    return self._exec(is_module, entry_point_fn, module_name, file, globals, locals)
+  File "D:\PyCharm Community Edition 2022.1.1\plugins\python-ce\helpers\pydev\pydevd.py", line 1491, in _exec
+    pydev_imports.execfile(file, globals, locals)  # execute the script
+  File "D:\PyCharm Community Edition 2022.1.1\plugins\python-ce\helpers\pydev\_pydev_imps\_pydev_execfile.py", line 18, in execfile
+    exec(compile(contents+"\n", file, 'exec'), glob, loc)
+  File "C:/Users/Wojtas/Desktop/gsn/GSN_rain_predictor/main.py", line 90, in <module>
+    main()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\main.py", line 94, in decorated_main
+    _run_hydra(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 394, in _run_hydra
+    _run_app(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 457, in _run_app
+    run_and_report(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 223, in run_and_report
+    raise ex
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 220, in run_and_report
+    return func()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\utils.py", line 458, in <lambda>
+    lambda: hydra.run(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\_internal\hydra.py", line 132, in run
+    _ = ret.return_value
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\core\utils.py", line 260, in return_value
+    raise self._return_value
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\hydra\core\utils.py", line 186, in run_job
+    ret.return_value = task_function(task_cfg)
+  File "C:/Users/Wojtas/Desktop/gsn/GSN_rain_predictor/main.py", line 82, in main
+    trainer.fit(main_model, dm)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 545, in fit
+    call._call_and_handle_interrupt(
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 581, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 990, in _run
+    results = self._run_stage()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1034, in _run_stage
+    self._run_sanity_check()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\trainer.py", line 1063, in _run_sanity_check
+    val_loop.run()
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\utilities.py", line 181, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 134, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\loops\evaluation_loop.py", line 391, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\call.py", line 309, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\strategies\strategy.py", line 403, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 79, in validation_step
+    loss = self.common_test_valid_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 56, in common_test_valid_step
+    loss, outputs, y = self.common_step(batch)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 52, in common_step
+    loss = self.compute_loss(outputs, y)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\predictors\RainPredictor.py", line 43, in compute_loss
+    visualize_batch_tensor_interactive(y)
+  File "C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\src\data_modules\vizualization.py", line 27, in visualize_batch_tensor_interactive
+    tensor = tensor[batch_idx].squeeze(1).numpy()  # Now shape is [sequence, height, width]
+TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.

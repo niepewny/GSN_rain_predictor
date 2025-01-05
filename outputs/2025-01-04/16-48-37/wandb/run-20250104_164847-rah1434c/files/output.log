@@ -1,0 +1,25 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | model         | ConvRNNCell      | 613
+1 | loss          | MeanSquaredError | 0
+2 | mapping_layer | Conv2d           | 2
+---------------------------------------------------
+615       Trainable params
+0         Non-trainable params
+615       Total params
+0.002     Total estimated model params size (MB)
+Epoch 2: 100%|██████████| 489/489 [01:41<00:00,  4.80it/s, v_num=434c, validation_loss=1.350, train_loss=1.340]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'train_dataloader' to speed up the dataloader worker initialization.
+Testing DataLoader 0: 100%|██████████| 489/489 [00:40<00:00, 12.20it/s]   
+`Trainer.fit` stopped: `max_epochs=3` reached.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'test_dataloader' to speed up the dataloader worker initialization.
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       Test metric             DataLoader 0
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        test_loss           1.3517646789550781
+     test_loss_epoch        1.3514549732208252
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

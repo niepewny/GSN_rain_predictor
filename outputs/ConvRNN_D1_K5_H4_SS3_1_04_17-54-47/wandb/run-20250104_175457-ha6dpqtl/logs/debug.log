@@ -1,0 +1,29 @@
+2025-01-04 17:54:57,468 INFO    MainThread:15524 [wandb_setup.py:_flush():68] Current SDK version is 0.19.1
+2025-01-04 17:54:57,468 INFO    MainThread:15524 [wandb_setup.py:_flush():68] Configure stats pid to 15524
+2025-01-04 17:54:57,468 INFO    MainThread:15524 [wandb_setup.py:_flush():68] Loading settings from C:\Users\Wojtas\.config\wandb\settings
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_setup.py:_flush():68] Loading settings from C:\Users\Wojtas\Desktop\gsn\GSN_rain_predictor\outputs\ConvRNN_D1_K5_H4_SS3_1_04_17-54-47\wandb\settings
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_init.py:_log_setup():528] Logging user logs to .\wandb\run-20250104_175457-ha6dpqtl\logs\debug.log
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_init.py:_log_setup():529] Logging internal logs to .\wandb\run-20250104_175457-ha6dpqtl\logs\debug-internal.log
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_init.py:init():644] calling init triggers
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_init.py:init():650] wandb.init called with sweep_config: {}
+config: {'timestamp': '04_17-54-47', 'experiment_id': 'ConvRNN_D1_K5_H4_SS3_1_04_17-54-47', 'wandb': {'key': '40c5c10f4b03fb955b2343280005f183c6e39d70', 'project_name': 'GSN_rain_prediction'}, 'data': {'dir': 'D:\\gsn_dataset\\2018', 'sequence_length': 3, 'step': 1, 'width': 64, 'height': 64, 'batch_size': 10, 'num_workers': 2}, 'early_stopping': {'monitor': 'validation_loss', 'patience': 3, 'verbose': False, 'mode': 'min'}, 'checkpoint': {'monitor': 'validation_loss', 'dirpath': './model/', 'filename': 'model-{epoch:02d}-{validation_loss:.2f}', 'save_top_k': 3, 'mode': 'min'}, 'model': {'RNN_cell_name': 'ConvRNN', 'input_channels': 1, 'RNN_cell_depth': 1, 'RNN_cell_kernel_size': 5, 'RNN_cell_hidden_channels': 4, 'scheduler_step': 7, 'scheduler_gamma': 0.9, 'learning_rate': 0.01, 'RNN_cell': {'_target_': 'src.architectures.ConvRNN.ConvRNNCell', 'input_channels': 1, 'hidden_channels': 4, 'kernel_size': 5, 'depth': 1, 'activation': {'_target_': 'torch.nn.ReLU'}}, 'loss_metrics': {'_target_': 'torchmetrics.MeanSquaredError', 'squared': True}}, 'trainer': {'accelerator': 'gpu', 'devices': [0], 'max_epochs': 4}}
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_init.py:init():680] starting backend
+2025-01-04 17:54:57,469 INFO    MainThread:15524 [wandb_init.py:init():684] sending inform_init request
+2025-01-04 17:54:57,486 INFO    MainThread:15524 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2025-01-04 17:54:57,487 INFO    MainThread:15524 [wandb_init.py:init():697] backend started and connected
+2025-01-04 17:54:57,489 INFO    MainThread:15524 [wandb_init.py:init():790] updated telemetry
+2025-01-04 17:54:57,537 INFO    MainThread:15524 [wandb_init.py:init():822] communicating run to backend with 90.0 second timeout
+2025-01-04 17:54:58,147 INFO    MainThread:15524 [wandb_init.py:init():874] starting run threads in backend
+2025-01-04 17:54:58,323 INFO    MainThread:15524 [wandb_run.py:_console_start():2374] atexit reg
+2025-01-04 17:54:58,323 INFO    MainThread:15524 [wandb_run.py:_redirect():2224] redirect: wrap_raw
+2025-01-04 17:54:58,323 INFO    MainThread:15524 [wandb_run.py:_redirect():2289] Wrapping output streams.
+2025-01-04 17:54:58,323 INFO    MainThread:15524 [wandb_run.py:_redirect():2314] Redirects installed.
+2025-01-04 17:54:58,327 INFO    MainThread:15524 [wandb_init.py:init():916] run started, returning control to user process
+2025-01-04 18:03:22,983 INFO    MainThread:15524 [wandb_run.py:_finish():2100] finishing run wmakurat1-pw/GSN_rain_prediction/ha6dpqtl
+2025-01-04 18:03:22,984 INFO    MainThread:15524 [wandb_run.py:_atexit_cleanup():2339] got exitcode: 0
+2025-01-04 18:03:22,985 INFO    MainThread:15524 [wandb_run.py:_restore():2321] restore
+2025-01-04 18:03:22,985 INFO    MainThread:15524 [wandb_run.py:_restore():2327] restore done
+2025-01-04 18:03:25,242 INFO    MainThread:15524 [wandb_run.py:_footer_history_summary_info():3892] rendering history
+2025-01-04 18:03:25,243 INFO    MainThread:15524 [wandb_run.py:_footer_history_summary_info():3924] rendering summary
+2025-01-04 18:03:25,254 INFO    MainThread:15524 [wandb_run.py:_footer_sync_info():3853] logging synced files

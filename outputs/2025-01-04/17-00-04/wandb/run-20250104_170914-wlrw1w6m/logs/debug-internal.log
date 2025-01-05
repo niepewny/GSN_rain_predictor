@@ -1,0 +1,17 @@
+{"time":"2025-01-04T17:09:14.6029771+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T17:09:14.6029771+01:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\Wojtas\\Desktop\\gsn\\GSN_rain_predictor\\outputs\\2025-01-04\\17-00-04\\wandb\\run-20250104_170914-wlrw1w6m\\logs\\debug-core.log"}
+{"time":"2025-01-04T17:09:14.7199649+01:00","level":"INFO","msg":"created new stream","id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:14.7199649+01:00","level":"INFO","msg":"stream: started","id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:14.7199649+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:14.7199649+01:00","level":"INFO","msg":"handler: started","stream_id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:14.7199649+01:00","level":"INFO","msg":"sender: started","stream_id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:15.0173977+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T17:09:15.4915894+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T17:09:15.4922988+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T17:09:16.4969149+01:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading artifact model_ConvRNNCell_D1_K5_H4_SS3.1_04-17-00-05","runtime_seconds":0.8498017,"subtasks":[{"desc":"model-epoch=01-validation_loss=1.33.ckpt","runtime_seconds":0.1254945,"progress":"21.6KB/21.6KB"},{"desc":"model-epoch=02-validation_loss=1.07.ckpt","runtime_seconds":0.1254945,"progress":"21.7KB/21.7KB"},{"desc":"model-epoch=03-validation_loss=0.11.ckpt","runtime_seconds":0.1251863,"progress":"21.7KB/21.7KB"}]}],"total_operations":1}}
+{"time":"2025-01-04T17:09:18.0581665+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T17:09:19.3545291+01:00","level":"INFO","msg":"stream: closing","id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:19.3545291+01:00","level":"INFO","msg":"handler: closed","stream_id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:19.3545291+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:19.3545291+01:00","level":"INFO","msg":"sender: closed","stream_id":"wlrw1w6m"}
+{"time":"2025-01-04T17:09:19.3545291+01:00","level":"INFO","msg":"stream: closed","id":"wlrw1w6m"}

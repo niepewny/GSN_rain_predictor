@@ -1,0 +1,24 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | model         | ConvRNNCell      | 22.8 K
+1 | loss          | MeanSquaredError | 0
+2 | mapping_layer | Conv2d           | 2
+---------------------------------------------------
+22.8 K    Trainable params
+0         Non-trainable params
+22.8 K    Total params
+0.091     Total estimated model params size (MB)
+Epoch 13: 100%|█████████████████████████████████████████████████████| 949/949 [02:48<00:00,  5.63it/s, v_num=pnp3, validation_loss=0.186, train_loss=0.202]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'val_dataloader' to speed up the dataloader worker initialization.
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'train_dataloader' to speed up the dataloader worker initialization.
+Testing DataLoader 0: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 204/204 [00:16<00:00, 12.12it/s]
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+C:\Users\Wojtas\Desktop\gsn\.venv\lib\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:436: Consider setting `persistent_workers=True` in 'test_dataloader' to speed up the dataloader worker initialization.
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       Test metric             DataLoader 0
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+        test_loss           0.19754697382450104
+     test_loss_epoch        0.1972733587026596
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
