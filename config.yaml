@@ -22,17 +22,17 @@ data:
   test_files_percent: 0.15
 
 early_stopping:
-  monitor: 'validation_loss'
-  patience: 6
+  monitor: "validation_loss"
+  patience: 4
   verbose: False
-  mode: 'min'
+  mode: "min"
 
 checkpoint:
-  monitor: 'validation_loss'
-  dirpath: './model/'
+  monitor: "validation_loss"
+  dirpath: "./model/"
   filename: "model-{epoch:02d}-{validation_loss:.2f}"
   save_top_k: 3
-  mode: 'min'
+  mode: "min"
 
 model:
   RNN_cell_name: ConvLSTM
@@ -55,7 +55,7 @@ model:
       _target_: torch.nn.Softsign
   loss_metrics:
     _target_: torchmetrics.MeanSquaredError
-    squared: true   
+    squared: true
 
 trainer:
   accelerator: "gpu"

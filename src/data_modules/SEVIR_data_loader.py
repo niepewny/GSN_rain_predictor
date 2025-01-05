@@ -4,8 +4,13 @@ from torch.utils.data import DataLoader, Dataset, Subset
 import pytorch_lightning as pl
 from torch.nn import functional as F
 import os
+import sys
 import math
 from torchvision import transforms
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 #from data_exploration import visualize_batch_tensor_interactive
 from src.data_modules.vizualization import visualize_batch_tensor_interactive
 import os
@@ -236,12 +241,12 @@ if __name__ == "__main__":
     ''' pytorch lightning datamodule '''
     # # przykład użycia
     dm = ConvLSTMSevirDataModule(
-        step=3,
-        width=128,
-        height=128,
+        step=2,
+        width=192,
+        height=192,
         batch_size=4,
         num_workers=1,
-        sequence_length=15,
+        sequence_length=9,
         train_files_percent=0.7,
         val_files_percent=0.15,
         test_files_percent=0.15,

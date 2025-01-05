@@ -1,0 +1,16 @@
+{"time":"2025-01-04T22:42:07.003406328+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T22:42:07.003418684+01:00","level":"INFO","msg":"created symlink","path":"wandb/run-20250104_224206-6paz2mrt/logs/debug-core.log"}
+{"time":"2025-01-04T22:42:07.107367784+01:00","level":"INFO","msg":"created new stream","id":"6paz2mrt"}
+{"time":"2025-01-04T22:42:07.107390613+01:00","level":"INFO","msg":"stream: started","id":"6paz2mrt"}
+{"time":"2025-01-04T22:42:07.107409239+01:00","level":"INFO","msg":"handler: started","stream_id":"6paz2mrt"}
+{"time":"2025-01-04T22:42:07.107404276+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"6paz2mrt"}
+{"time":"2025-01-04T22:42:07.107463388+01:00","level":"INFO","msg":"sender: started","stream_id":"6paz2mrt"}
+{"time":"2025-01-04T22:42:07.838558526+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T22:55:02.583232597+01:00","level":"INFO","msg":"stream: closing","id":"6paz2mrt"}
+{"time":"2025-01-04T22:55:02.583560784+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T22:55:02.589241376+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T22:55:03.456884862+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T22:55:04.02635592+01:00","level":"INFO","msg":"handler: closed","stream_id":"6paz2mrt"}
+{"time":"2025-01-04T22:55:04.02639656+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"6paz2mrt"}
+{"time":"2025-01-04T22:55:04.026409775+01:00","level":"INFO","msg":"sender: closed","stream_id":"6paz2mrt"}
+{"time":"2025-01-04T22:55:04.026473722+01:00","level":"INFO","msg":"stream: closed","id":"6paz2mrt"}

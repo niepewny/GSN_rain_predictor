@@ -1,0 +1,16 @@
+{"time":"2025-01-05T14:59:43.737427136+01:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-05T14:59:43.737443559+01:00","level":"INFO","msg":"created symlink","path":"wandb/run-20250105_145943-qipraljm/logs/debug-core.log"}
+{"time":"2025-01-05T14:59:43.844153565+01:00","level":"INFO","msg":"created new stream","id":"qipraljm"}
+{"time":"2025-01-05T14:59:43.844233762+01:00","level":"INFO","msg":"stream: started","id":"qipraljm"}
+{"time":"2025-01-05T14:59:43.844262295+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"qipraljm"}
+{"time":"2025-01-05T14:59:43.844332267+01:00","level":"INFO","msg":"sender: started","stream_id":"qipraljm"}
+{"time":"2025-01-05T14:59:43.844541171+01:00","level":"INFO","msg":"handler: started","stream_id":"qipraljm"}
+{"time":"2025-01-05T14:59:44.425940272+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-05T14:59:46.515335697+01:00","level":"INFO","msg":"stream: closing","id":"qipraljm"}
+{"time":"2025-01-05T14:59:46.515370833+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-05T14:59:46.515836165+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-05T14:59:47.273619677+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-05T14:59:47.555420705+01:00","level":"INFO","msg":"handler: closed","stream_id":"qipraljm"}
+{"time":"2025-01-05T14:59:47.555449056+01:00","level":"INFO","msg":"sender: closed","stream_id":"qipraljm"}
+{"time":"2025-01-05T14:59:47.5554481+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"qipraljm"}
+{"time":"2025-01-05T14:59:47.555518015+01:00","level":"INFO","msg":"stream: closed","id":"qipraljm"}

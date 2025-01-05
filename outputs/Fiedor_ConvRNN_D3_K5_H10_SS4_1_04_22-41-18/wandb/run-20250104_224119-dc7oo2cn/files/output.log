@@ -1,0 +1,16 @@
+
+  | Name          | Type             | Params | Mode
+-----------------------------------------------------------
+0 | model         | ConvRNNCell      | 18.1 K | train
+1 | loss          | MeanSquaredError | 0      | train
+2 | mapping_layer | Conv2d           | 2      | train
+-----------------------------------------------------------
+18.1 K    Trainable params
+0         Non-trainable params
+18.1 K    Total params
+0.072     Total estimated model params size (MB)
+16        Modules in train mode
+0         Modules in eval mode
+Epoch 0:  16%|█████████▉                                                    | 76/475 [00:20<01:49,  3.65it/s, v_num=o2cn]
+
+Detected KeyboardInterrupt, attempting graceful shutdown ...

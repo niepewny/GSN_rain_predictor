@@ -1,0 +1,139 @@
+_wandb:
+    value:
+        cli_version: 0.19.1
+        m:
+            - "1": examples.width
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": trainer/global_step
+              "6":
+                - 3
+              "7": []
+            - "1": examples.height
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.format
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.count
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.filenames
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples.captions
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": examples._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+        python_version: 3.12.8
+        t:
+            "1":
+                - 1
+                - 9
+                - 41
+                - 50
+                - 55
+                - 103
+            "2":
+                - 1
+                - 9
+                - 41
+                - 50
+                - 55
+                - 103
+            "3":
+                - 7
+                - 13
+                - 16
+                - 23
+                - 55
+                - 66
+            "4": 3.12.8
+            "5": 0.19.1
+            "8":
+                - 5
+            "12": 0.19.1
+            "13": linux-x86_64
+checkpoint:
+    value:
+        dirpath: ./model/
+        filename: model-{epoch:02d}-{validatgion_loss:.2f}
+        mode: min
+        monitor: validation_loss
+        save_top_k: 3
+data:
+    value:
+        batch_size: 20
+        dir: /home/kolaj/my_project/AI/PyTorch/GSN_rain_predictor/data/
+        height: 32
+        num_workers: 2
+        sequence_length: 4
+        step: 1
+        test_files_percent: 0.15
+        train_files_percent: 0.7
+        val_files_percent: 0.15
+        width: 32
+early_stopping:
+    value:
+        mode: min
+        monitor: validation_loss
+        patience: 4
+        verbose: false
+experiment_id:
+    value: Fiedor_ConvRNN_D3_K5_H10_SS4_1_04_22-41-18
+model:
+    value:
+        RNN_cell:
+            _target_: src.architectures.ConvRNN.ConvRNNCell
+            activation:
+                _target_: torch.nn.ReLU
+            depth: 3
+            hidden_channels: 10
+            input_channels: 1
+            kernel_size: 5
+        RNN_cell_depth: 3
+        RNN_cell_hidden_channels: 10
+        RNN_cell_kernel_size: 5
+        RNN_cell_name: ConvRNN
+        input_channels: 1
+        learning_rate: 0.01
+        loss_metrics:
+            _target_: torchmetrics.MeanSquaredError
+            squared: true
+        scheduler_gamma: 0.9
+        scheduler_step: 7
+timestamp:
+    value: 04_22-41-18
+trainer:
+    value:
+        accelerator: cpu
+        devices: 1
+        max_epochs: 10
+        num_visualised_samples: 6
+wandb:
+    value:
+        key: 40c5c10f4b03fb955b2343280005f183c6e39d70
+        project_name: GSN_rain_prediction

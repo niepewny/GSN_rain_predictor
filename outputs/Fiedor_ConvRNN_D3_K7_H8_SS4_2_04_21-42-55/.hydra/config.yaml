@@ -1,0 +1,53 @@
+timestamp: ${now:%d_%H-%M-%S}
+experiment_id: Fiedor_${model.RNN_cell_name}_D${model.RNN_cell.depth}_K${model.RNN_cell.kernel_size}_H${model.RNN_cell.hidden_channels}_SS${data.sequence_length}_${data.step}_${timestamp}
+wandb:
+  key: 40c5c10f4b03fb955b2343280005f183c6e39d70
+  project_name: GSN_rain_prediction
+data:
+  dir: data/
+  sequence_length: 4
+  step: 2
+  width: 64
+  height: 64
+  batch_size: 10
+  num_workers: 2
+  train_files_percent: 0.7
+  val_files_percent: 0.15
+  test_files_percent: 0.15
+early_stopping:
+  monitor: validation_loss
+  patience: 4
+  verbose: false
+  mode: min
+checkpoint:
+  monitor: validation_loss
+  dirpath: ./model/
+  filename: model-{epoch:02d}-{validation_loss:.2f}
+  save_top_k: 3
+  mode: min
+model:
+  RNN_cell_name: ConvRNN
+  input_channels: 1
+  RNN_cell_depth: 3
+  RNN_cell_kernel_size: 7
+  RNN_cell_hidden_channels: 8
+  scheduler_step: 7
+  scheduler_gamma: 0.9
+  learning_rate: 0.01
+  RNN_cell:
+    _target_: src.architectures.ConvRNN.ConvRNNCell
+    input_channels: ${model.input_channels}
+    hidden_channels: ${model.RNN_cell_hidden_channels}
+    kernel_size: ${model.RNN_cell_kernel_size}
+    depth: ${model.RNN_cell_depth}
+    activation:
+      _target_: torch.nn.ReLU
+  loss_metrics:
+    _target_: torchmetrics.MeanSquaredError
+    squared: true
+trainer:
+  accelerator: cpu
+  devices:
+  - 0
+  max_epochs: 15
+  num_visualised_samples: 6
