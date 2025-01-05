@@ -52,7 +52,7 @@ model:
     activation:
       _target_: torch.nn.ReLU
   mapper_activation:
-      _target_: torch.nn.softsign
+      _target_: torch.nn.Softsign
   loss_metrics:
     _target_: torchmetrics.MeanSquaredError
     squared: true   
