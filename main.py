@@ -19,7 +19,7 @@ from src.data_modules.SEVIR_data_loader import ConvLSTMSevirDataModule
 from src.utils.Logger import ImagePredictionLogger
 
 
-OmegaConf.register_resolver("now", lambda pattern: datetime.now().strftime(pattern))
+OmegaConf.register_new_resolver("now", lambda pattern: datetime.now().strftime(pattern))
 @hydra.main(config_path=".", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
     wandb.login(key=cfg.wandb.key)
