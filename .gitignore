@@ -1,3 +1,6 @@
 *.h5
 __pycache__/
 .idea/
+venvGSN/
+venv/
+

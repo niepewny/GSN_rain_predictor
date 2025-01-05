@@ -4,10 +4,15 @@ from torch.utils.data import DataLoader, Dataset, Subset
 import pytorch_lightning as pl
 from torch.nn import functional as F
 import os
+import sys
 import math
 from torchvision import transforms
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 #from data_exploration import visualize_batch_tensor_interactive
-from vizualization import visualize_batch_tensor_interactive
+from src.data_modules.vizualization import visualize_batch_tensor_interactive
 import os
 os.environ["HDF5_USE_FILE_LOCKING"]='FALSE'
 
