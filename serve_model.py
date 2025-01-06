@@ -17,7 +17,7 @@ def load_model(checkpoint_path: str, config_path: str) -> RainPredictor:
     # model z checkpointu
     model = RainPredictor.load_from_checkpoint(
         checkpoint_path=checkpoint_path,
-        model=cfg.model.RNN_cell,  
+        model=cfg.model.RNN_cell,
         mapping_activation=cfg.model.mapper_activation,
         learning_rate=cfg.model.learning_rate,
         loss_metrics=cfg.model.loss_metrics,
@@ -35,8 +35,9 @@ if __name__ == "__main__":
     # model_weights_path = "outputs/ConvRNN_D3_K7_H8_SS4_2_04_18-37-04/checkpoints/model-epoch=01-validation_loss=1.53.ckpt"
     # yaml_config_hydra = "outputs/ConvRNN_D3_K7_H8_SS4_2_04_18-37-04/.hydra/config.yaml"
 
-    model_weights_path = "outputs/ConvRNN_D1_K5_H4_SS3_1_04_17-54-4-serve/checkpoints/model-epoch=03-validation_loss=0.09.ckpt"
-    yaml_config_hydra = "outputs/ConvRNN_D1_K5_H4_SS3_1_04_17-54-4-serve/.hydra/config.yaml"
+    model_weights_path = "/home/kolaj/my_project/AI/PyTorch/GSN_rain_predictor/outputs/Cloud-ConvLSTM/checkpoints/model-epoch=37-validation_loss=0.10.ckpt"
+    # yaml_config_hydra = "/home/kolaj/my_project/AI/PyTorch/GSN_rain_predictor/outputs/Cloud-ConvLSTM/wandb/run-20250105_225907-j97g5jg5/files/config.yaml"
+    yaml_config_hydra = "config.yaml"
     dm = ConvLSTMSevirDataModule(
         step=2,
         width=192,
