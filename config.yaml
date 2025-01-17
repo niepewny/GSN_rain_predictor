@@ -38,13 +38,8 @@ model:
   RNN_cell_name: ConvPeepholeLSTMCell
   input_channels: 1
   RNN_cell_depth: 1
-<<<<<<< HEAD
   RNN_cell_kernel_size: 7
   RNN_cell_hidden_channels: 12
-=======
-  RNN_cell_kernel_size: 5
-  RNN_cell_hidden_channels: 16
->>>>>>> 61bb4b707a45472995b716451f10892c45eec8cc
   scheduler_step: 10
   scheduler_gamma: 0.1
   learning_rate: 0.01
