@@ -1,0 +1,41 @@
+{
+  "os":  "Linux-6.8.0-1020-gcp-x86_64-with-glibc2.35",
+  "python":  "CPython 3.10.12",
+  "startedAt":  "2025-01-05T22:59:07.014425Z",
+  "program":  "/home/mikolajfiedorczuk/GSN_rain_predictor/main.py",
+  "codePath":  "main.py",
+  "git":  {
+    "remote":  "https://github.com/niepewny/GSN_rain_predictor.git",
+    "commit":  "81376428effff9a4cf7fe685a6638a23c0b9a85a"
+  },
+  "email":  "wmakurat1@gmail.com",
+  "root":  ".",
+  "host":  "ai-bestia",
+  "executable":  "/home/mikolajfiedorczuk/GSN_rain_predictor/venvGSN/bin/python3",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "gpu":  "Tesla T4",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "103865303040",
+      "used":  "62264172544"
+    }
+  },
+  "memory":  {
+    "total":  "31538290688"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "Tesla T4",
+      "memoryTotal":  "16106127360",
+      "cudaCores":  2560,
+      "architecture":  "Turing"
+    }
+  ],
+  "cudaVersion":  "12.2"
+}

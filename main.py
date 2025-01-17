@@ -1,5 +1,6 @@
 # Pytorch
 import pytorch_lightning as pl
+import torch.nn
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -8,6 +9,8 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 import hydra
 from hydra.utils import instantiate
 from omegaconf import DictConfig
+
+import src.architectures.PeepholeConvLSTM
 import wandb
 import os
 from omegaconf import OmegaConf
@@ -55,8 +58,16 @@ def main(cfg: DictConfig):
         save_top_k=cfg.checkpoint.save_top_k,
         mode=cfg.checkpoint.mode)
 
+    # model = src.architectures.PeepholeConvLSTM.ConvPeepholeLSTMCell(
+    #     hidden_channels=12,
+    #     input_channels=1,
+    #     depth=1,
+    #     activation=torch.nn.Tanh,
+    #     kernel_size=5
+    # )
     main_model = RainPredictor(
         model=instantiate(cfg.model.RNN_cell),
+        # model=model,
         mapping_activation=instantiate(cfg.model.mapper_activation),
         learning_rate=cfg.model.learning_rate,
         loss_metrics=instantiate(cfg.model.loss_metrics),

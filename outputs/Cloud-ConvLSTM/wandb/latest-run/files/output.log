@@ -1,0 +1,25 @@
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name               | Type             | Params | Mode
+----------------------------------------------------------------
+0 | model              | ConvLSTMCell     | 27.3 K | train
+1 | mapping_activation | Softsign         | 0      | train
+2 | loss               | MeanSquaredError | 0      | train
+3 | mapping_layer      | Conv2d           | 17     | train
+----------------------------------------------------------------
+27.3 K    Trainable params
+0         Non-trainable params
+27.3 K    Total params
+0.109     Total estimated model params size (MB)
+7         Modules in train mode
+0         Modules in eval mode
+Epoch 41: 100%|█| 19/19 [01:50<00:00,  0.17it/s, v_num=5jg5, validation_loss=0.103, train_loss=0.0
+/home/mikolajfiedorczuk/GSN_rain_predictor/venvGSN/lib/python3.10/site-packages/pytorch_lightning/loops/fit_loop.py:310: The number of training batches (19) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+Testing DataLoader 0: 100%|█████████████████████████████████████████| 4/4 [00:01<00:00,  2.74it/s]
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+──────────────────────────────────────────────────────────────────────────────────────────────────
+       Test metric             DataLoader 0
+──────────────────────────────────────────────────────────────────────────────────────────────────
+        test_loss           0.06479207426309586
+     test_loss_epoch        0.06447574496269226
+──────────────────────────────────────────────────────────────────────────────────────────────────

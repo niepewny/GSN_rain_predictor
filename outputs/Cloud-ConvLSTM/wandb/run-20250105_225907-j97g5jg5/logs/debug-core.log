@@ -1,0 +1,16 @@
+{"time":"2025-01-05T22:58:47.501371614Z","level":"INFO","msg":"started logging, with flags","port-filename":"/tmp/tmpme6p1tjh/port-4348.txt","pid":4348,"debug":false,"disable-analytics":false}
+{"time":"2025-01-05T22:58:47.501394972Z","level":"INFO","msg":"FeatureState","shutdownOnParentExitEnabled":false}
+{"time":"2025-01-05T22:58:47.503710967Z","level":"INFO","msg":"Will exit if parent process dies.","ppid":4348}
+{"time":"2025-01-05T22:58:47.503706143Z","level":"INFO","msg":"server is running","addr":{"IP":"127.0.0.1","Port":33711,"Zone":""}}
+{"time":"2025-01-05T22:58:47.687180714Z","level":"INFO","msg":"connection: ManageConnectionData: new connection created","id":"127.0.0.1:46100"}
+{"time":"2025-01-05T22:59:07.017103827Z","level":"INFO","msg":"handleInformInit: received","streamId":"j97g5jg5","id":"127.0.0.1:46100"}
+{"time":"2025-01-05T22:59:07.120076848Z","level":"INFO","msg":"handleInformInit: stream started","streamId":"j97g5jg5","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.356896117Z","level":"INFO","msg":"handleInformFinish: finish message received","streamId":"j97g5jg5","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.358377021Z","level":"INFO","msg":"handleInformFinish: stream closed","streamId":"j97g5jg5","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.398023077Z","level":"INFO","msg":"handleInformTeardown: server teardown initiated","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.398044238Z","level":"INFO","msg":"handleInformTeardown: server shutdown complete","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.39805147Z","level":"INFO","msg":"server is shutting down"}
+{"time":"2025-01-06T00:23:14.398096741Z","level":"INFO","msg":"connection: Close: initiating connection closure","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.398185547Z","level":"INFO","msg":"connection: Close: connection successfully closed","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.398841468Z","level":"INFO","msg":"connection: ManageConnectionData: connection closed","id":"127.0.0.1:46100"}
+{"time":"2025-01-06T00:23:14.398861971Z","level":"INFO","msg":"server is closed"}
