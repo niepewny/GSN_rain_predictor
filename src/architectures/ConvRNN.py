@@ -64,12 +64,12 @@ class ConvRNNCell(nn.Module):
 
         self.h_prev = h_next
 
-        output = h_next
-        if gen_output:
-            for i, layer in enumerate(self.output_layers):
-                if i == len(self.output_layers) - 1:
-                    output = layer(output)
-                else:
-                    output = self.activation(layer(output))
+        # output = h_next
+        # if gen_output:
+        #     for i, layer in enumerate(self.output_layers):
+        #         if i == len(self.output_layers) - 1:
+        #             output = layer(output)
+        #         else:
+        #             output = self.activation(layer(output))
 
-        return output
+        return h_next

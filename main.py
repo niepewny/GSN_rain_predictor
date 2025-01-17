@@ -58,17 +58,10 @@ def main(cfg: DictConfig):
         save_top_k=cfg.checkpoint.save_top_k,
         mode=cfg.checkpoint.mode)
 
-    # model = src.architectures.PeepholeConvLSTM.ConvPeepholeLSTMCell(
-    #     hidden_channels=12,
-    #     input_channels=1,
-    #     depth=1,
-    #     activation=torch.nn.Tanh,
-    #     kernel_size=5
-    # )
     main_model = RainPredictor(
         model=instantiate(cfg.model.RNN_cell),
-        # model=model,
         mapping_activation=instantiate(cfg.model.mapper_activation),
+        kernel_size=cfg.model.kernel_size,
         learning_rate=cfg.model.learning_rate,
         loss_metrics=instantiate(cfg.model.loss_metrics),
         scheduler_step=cfg.model.scheduler_step,

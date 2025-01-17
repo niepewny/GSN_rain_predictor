@@ -38,17 +38,16 @@ model:
   RNN_cell_name: ConvPeepholeLSTMCell
   input_channels: 1
   RNN_cell_depth: 1
-  RNN_cell_kernel_size: 7
   RNN_cell_hidden_channels: 12
+  kernel_size: 7
   scheduler_step: 10
   scheduler_gamma: 0.1
   learning_rate: 0.01
   RNN_cell:
     _target_: src.architectures.PeepholeConvLSTM.ConvPeepholeLSTMCell
     input_channels: ${model.input_channels}
-    out_channels: ${model.RNN_cell_hidden_channels}
     hidden_channels: ${model.RNN_cell_hidden_channels}
-    kernel_size: ${model.RNN_cell_kernel_size}
+    kernel_size: ${model.kernel_size}
     depth: ${model.RNN_cell_depth}
     activation:
       _target_: torch.nn.Tanh

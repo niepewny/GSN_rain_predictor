@@ -7,7 +7,7 @@ from src.data_modules.vizualization import visualize_batch_tensor_interactive
 
 class RainPredictor(pl.LightningModule):
 
-    def __init__(self, model, mapping_activation,  learning_rate, loss_metrics, scheduler_step, scheduler_gamma):
+    def __init__(self, model, mapping_activation, kernel_size, learning_rate, loss_metrics, scheduler_step, scheduler_gamma):
         super().__init__()
 
         self.model = model
@@ -17,24 +17,25 @@ class RainPredictor(pl.LightningModule):
         self.scheduler_step = scheduler_step
         self.scheduler_gamma = scheduler_gamma
 
-        # self.mapping_layer = nn.Conv2d(
-        #         in_channels=model.out_channels,
-        #         out_channels=1,
-        #         kernel_size=1,
-        #         padding=0
-        #     )
-        # self.batchNorm = nn.BatchNorm2d(model.out_channels)
-        depth=2
+        hidden_channels = model.hidden_channels
+
         self.mapping_layer = nn.Sequential(*[
             nn.Sequential(
-                nn.BatchNorm2d(model.hidden_channels),
+                nn.BatchNorm2d(hidden_channels),
                 nn.Conv2d(
-                    in_channels=model.out_channels if i == 0 else model.hidden_channels,
-                    out_channels=model.hidden_channels if i != depth - 1 else 1,  # OSTATNIA WARSTWA MA WYJŚCIE 1 KANAŁ
-                    kernel_size=5,
-                    padding=5 // 2
-                )
-            ) for i in range(depth)
+                    in_channels=hidden_channels,
+                    out_channels=hidden_channels,
+                    kernel_size=kernel_size,
+                    padding=kernel_size // 2
+                ),
+                nn.BatchNorm2d(hidden_channels),
+                nn.Conv2d(
+                    in_channels=hidden_channels,
+                    out_channels=1,
+                    kernel_size=1,
+                    padding=0
+                ),
+            )
         ])
         self.current_epoch_training_loss = torch.tensor(0.0)
         self.training_step_outputs = []
@@ -47,7 +48,6 @@ class RainPredictor(pl.LightningModule):
         for i in range(sequence_length):
             outputs = self.model(x[:, i], gen_output=(i == sequence_length-1))
         
-        # outputs = self.mapping_activation(self.mapping_layer(outputs))
         outputs = self.mapping_layer(outputs)
         outputs = self.mapping_activation(outputs)
 
