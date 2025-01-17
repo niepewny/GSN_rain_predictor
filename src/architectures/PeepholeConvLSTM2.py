@@ -1,10 +1,10 @@
 import torch
 import torch.nn as nn
-from src.architectures.ConvLSTM import ConvLSTMCell
+from ConvLSTM import ConvLSTMCell
 import torch.nn.functional as F
 
 
-class ConvPeepholeLSTMCell(ConvLSTMCell):
+class ConvPeepholeLSTMCell(nn.Module):
     def __init__(self, input_channels=1, hidden_channels=3, kernel_size=5, depth=1, activation=F.relu):
         super().__init__()
         self.depth = depth
@@ -27,6 +27,14 @@ class ConvPeepholeLSTMCell(ConvLSTMCell):
 
         self.H = None
         self.C = None
+
+    def initialize_hidden_state(self, batch_size, height, width, device):
+        self.H = torch.zeros(
+            batch_size, self.hidden_channels, height, width, device=device
+        )
+        self.C = torch.zeros(
+            batch_size, self.hidden_channels, height, width, device=device
+        )
 
     def forward(self, x, gen_output=False):
         if self.H is None:

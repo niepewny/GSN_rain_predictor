@@ -12,10 +12,10 @@ wandb:
 data:
   dir: "D:\\gsn_dataset\\all"
   sequence_length: 8
-  step: 4
+  step: 6
   width: 64
   height: 64
-  batch_size: 15
+  batch_size: 30
   num_workers: 2
   train_files_percent: 0.7
   val_files_percent: 0.15
@@ -23,7 +23,7 @@ data:
 
 early_stopping:
   monitor: "validation_loss"
-  patience: 4
+  patience: 8
   verbose: False
   mode: "min"
 
@@ -35,22 +35,22 @@ checkpoint:
   mode: "min"
 
 model:
-  RNN_cell_name: ConvLSTM
+  RNN_cell_name: ConvPeepholeLSTMCell
   input_channels: 1
   RNN_cell_depth: 1
   RNN_cell_kernel_size: 7
-  RNN_cell_hidden_channels: 8
+  RNN_cell_hidden_channels: 12
   scheduler_step: 10
   scheduler_gamma: 0.1
   learning_rate: 0.01
   RNN_cell:
-    _target_: src.architectures.ConvLSTM.ConvLSTMCell
+    _target_: src.architectures.PeepholeConvLSTM.ConvPeepholeLSTMCell
     input_channels: ${model.input_channels}
     hidden_channels: ${model.RNN_cell_hidden_channels}
     kernel_size: ${model.RNN_cell_kernel_size}
     depth: ${model.RNN_cell_depth}
     activation:
-      _target_: torch.nn.ReLU
+      _target_: torch.nn.Tanh
   mapper_activation:
       _target_: torch.nn.Softsign
   loss_metrics:
