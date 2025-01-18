@@ -1,4 +1,3 @@
-# Pytorch
 import pytorch_lightning as pl
 import torch.nn
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
@@ -21,8 +20,8 @@ from src.predictors.RainPredictor import RainPredictor
 from src.data_modules.SEVIR_data_loader import ConvLSTMSevirDataModule
 from src.utils.Logger import ImagePredictionLogger
 
-
 OmegaConf.register_new_resolver("now", lambda pattern: datetime.now().strftime(pattern))
+
 @hydra.main(config_path=".", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
     wandb.login(key=cfg.wandb.key)
@@ -56,17 +55,11 @@ def main(cfg: DictConfig):
         dirpath="checkpoints",
         filename=cfg.checkpoint.filename,
         save_top_k=cfg.checkpoint.save_top_k,
-        mode=cfg.checkpoint.mode)
+        mode=cfg.checkpoint.mode
+    )
 
-    main_model = RainPredictor(
-        model=instantiate(cfg.model.RNN_cell),
-        mapping_activation=instantiate(cfg.model.mapper_activation),
-        kernel_size=cfg.model.kernel_size,
-        learning_rate=cfg.model.learning_rate,
-        loss_metrics=instantiate(cfg.model.loss_metrics),
-        scheduler_step=cfg.model.scheduler_step,
-        scheduler_gamma=cfg.model.scheduler_gamma
-        )
+    # CHANGED: instantiate(cfg.model) now returns a valid RainPredictor (LightningModule).
+    main_model = instantiate(cfg.model)
 
     val_samples = next(iter(val_loader))
     trainer = pl.Trainer(
@@ -74,24 +67,21 @@ def main(cfg: DictConfig):
             checkpoint_callback,
             early_stop_callback,
             ImagePredictionLogger(val_samples, num_samples=cfg.trainer.num_visualised_samples)
-            ],
+        ],
         logger=WandbLogger(
             project=cfg.wandb.project_name,
             job_type='train',
             name=cfg.experiment_id,
             config=OmegaConf.to_container(cfg, resolve=True)
-            ),
+        ),
         accelerator=cfg.trainer.accelerator,
         devices=cfg.trainer.devices,
         max_epochs=cfg.trainer.max_epochs
-        )
+    )
 
     trainer.fit(main_model, dm)
-
     trainer.test(model=main_model, datamodule=dm)
-
     wandb.finish()
-
 
 if __name__ == "__main__":
     main()

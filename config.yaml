@@ -1,64 +1,64 @@
 hydra:
-  run:
-    dir: outputs/${experiment_id}
+    run:
+        dir: outputs/${experiment_id}
 
 timestamp: ${now:%d_%H-%M-%S}
-experiment_id: ${model.RNN_cell_name}_D${model.RNN_cell.depth}_K${model.RNN_cell.kernel_size}_H${model.RNN_cell.hidden_channels}_SS${data.sequence_length}.${data.step}_${timestamp}
+
+experiment_id: hydra_tests_RTX3090_D${model.model.depth}_K${model.model.kernel_size}_H${model.model.hidden_channels}_SS${data.sequence_length}.${data.step}_${timestamp}
 
 wandb:
-  key: "40c5c10f4b03fb955b2343280005f183c6e39d70"
-  project_name: "GSN_rain_prediction"
+    key: "40c5c10f4b03fb955b2343280005f183c6e39d70"
+    project_name: "GSN_rain_prediction"
 
 data:
-  dir: "D:\\gsn_dataset\\all"
-  sequence_length: 8
-  step: 6
-  width: 64
-  height: 64
-  batch_size: 30
-  num_workers: 2
-  train_files_percent: 0.7
-  val_files_percent: 0.15
-  test_files_percent: 0.15
+    dir: "/home/ai/projects/GSN_rain_predictor/data"
+    sequence_length: 8
+    step: 6
+    width: 64
+    height: 64
+    batch_size: 1024
+    num_workers: 2
+    train_files_percent: 0.7
+    val_files_percent: 0.15
+    test_files_percent: 0.15
 
 early_stopping:
-  monitor: "validation_loss"
-  patience: 8
-  verbose: False
-  mode: "min"
+    monitor: "validation_loss"
+    patience: 8
+    verbose: False
+    mode: "min"
 
 checkpoint:
-  monitor: "validation_loss"
-  dirpath: "./model/"
-  filename: "model-{epoch:02d}-{validation_loss:.2f}"
-  save_top_k: 3
-  mode: "min"
+    monitor: "validation_loss"
+    dirpath: "./model/"
+    filename: "model-{epoch:02d}-{validation_loss:.2f}"
+    save_top_k: 3
+    mode: "min"
 
 model:
-  RNN_cell_name: ConvPeepholeLSTMCell
-  input_channels: 1
-  RNN_cell_depth: 1
-  RNN_cell_hidden_channels: 12
-  kernel_size: 7
-  scheduler_step: 10
-  scheduler_gamma: 0.1
-  learning_rate: 0.01
-  RNN_cell:
-    _target_: src.architectures.PeepholeConvLSTM.ConvPeepholeLSTMCell
-    input_channels: ${model.input_channels}
-    hidden_channels: ${model.RNN_cell_hidden_channels}
-    kernel_size: ${model.kernel_size}
-    depth: ${model.RNN_cell_depth}
-    activation:
-      _target_: torch.nn.Tanh
-  mapper_activation:
-    _target_: torch.nn.Softsign
-  loss_metrics:
-    _target_: torchmetrics.MeanSquaredError
-    squared: true
+    _target_: src.predictors.RainPredictor.RainPredictor
+    kernel_size: 5
+    learning_rate: 0.01
+    scheduler_step: 10
+    scheduler_gamma: 0.1
+    model:
+        _target_: src.architectures.ConvRNN.ConvRNNCell
+        input_channels: 1
+        hidden_channels: 8
+        kernel_size: 5
+        depth: 7
+        activation:
+            _target_: torch.nn.ReLU
+
+    mapping_activation:
+        _target_: torch.nn.Softsign
+
+    loss_metrics:
+        _target_: torchmetrics.MeanSquaredError
+        squared: true
 
 trainer:
-  accelerator: "gpu"
-  devices: [0]
-  max_epochs: 50
-  num_visualised_samples: 6
+    accelerator: "gpu"
+    devices: [0]
+    max_epochs: 50
+    num_visualised_samples: 6
